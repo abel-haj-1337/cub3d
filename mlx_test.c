@@ -22,11 +22,12 @@
 t_player	player;
 t_mlx		mlx;
 
-void		destroy_mlx(void)
+int		destroy_mlx(void *a)
 {
-	mlx_clear_window(mlx.mlx, mlx.win);
-	mlx_destroy_window(mlx.mlx, mlx.win);
-	exit(0);
+	// mlx_clear_window(mlx.mlx, mlx.win);
+	// mlx_destroy_window(mlx.mlx, mlx.win);
+	// exit(0);
+	return 0;
 }
 
 int			rgb_to_hex(int r, int g, int b)
@@ -75,7 +76,10 @@ int			handle_key(int key_code)
 	// quit
 	if (key_code == 12 || key_code == 53)
 	{
-		destroy_mlx();
+		// destroy_mlx();
+		mlx_clear_window(mlx.mlx, mlx.win);
+		mlx_destroy_window(mlx.mlx, mlx.win);
+		exit(0);
 	}
 	// left
 	else if (key_code == 0)
@@ -121,6 +125,7 @@ int			main(void)
 
 	// handle events
 	mlx_key_hook(mlx.win, handle_key, (void *)0);
+	// EXCEPTION
 	mlx_hook(mlx.mlx, 17, 0, destroy_mlx, (void *)0);
 
 	// keep game running
