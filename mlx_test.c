@@ -22,11 +22,11 @@
 t_player	player;
 t_mlx		mlx;
 
-int		destroy_mlx(void *a)
+int		destroy_mlx(void)
 {
-	// mlx_clear_window(mlx.mlx, mlx.win);
-	// mlx_destroy_window(mlx.mlx, mlx.win);
-	// exit(0);
+	mlx_clear_window(mlx.mlx, mlx.win);
+	mlx_destroy_window(mlx.mlx, mlx.win);
+	exit(0);
 	return 0;
 }
 
@@ -76,10 +76,10 @@ int			handle_key(int key_code)
 	// quit
 	if (key_code == 12 || key_code == 53)
 	{
-		// destroy_mlx();
-		mlx_clear_window(mlx.mlx, mlx.win);
-		mlx_destroy_window(mlx.mlx, mlx.win);
-		exit(0);
+		destroy_mlx();
+		// mlx_clear_window(mlx.mlx, mlx.win);
+		// mlx_destroy_window(mlx.mlx, mlx.win);
+		// exit(0);
 	}
 	// left
 	else if (key_code == 0)
@@ -117,16 +117,19 @@ int			main(void)
 	player.x = 0;
 	player.y = 0;
 
-	// draw something
-	draw_player_at_start(BLUE);
-
 	//put_square(mlx, 0, rgb_to_hex(0, 0, 255));
 	//put_square(mlx, 10, rgb_to_hex(0, 0, 255));
 
 	// handle events
-	mlx_key_hook(mlx.win, handle_key, (void *)0);
+	// mlx_key_hook(mlx.win, handle_key, (void *)0);
 	// EXCEPTION
-	mlx_hook(mlx.mlx, 17, 0, destroy_mlx, (void *)0);
+	mlx_hook(mlx.win, 2, 0, handle_key, (void *)0);
+	mlx_hook(mlx.win, 17, 0, destroy_mlx, (void *)0);
+
+	// draw map
+	
+	// draw player
+	draw_player_at_start(BLUE);
 
 	// keep game running
 	mlx_loop(mlx.mlx);
