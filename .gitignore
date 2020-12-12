@@ -51,6 +51,9 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Visual Studio Code
+.vscode/*
+
 # Others
 .DS_STORE
 cub3d
