@@ -14,9 +14,12 @@ CFLAGS		= -Wall -Wextra -Werror
 
 NAME		=
 
-SRC			= *.c
+SRC			= mlx_test.c rgb_to_hex.c
 
 OBJ			= $(SRC:.c=.o)
+
+testit		:
+	gcc -g -I /usr/local/include $(SRC) -L /usr/local/lib/ -lmlx -L /usr/lib/ -lz -framework OpenGL -framework AppKit
 
 $(NAME)		:
 	@gcc -c $(OBJ) $(SRC) && echo "\033[1;33mCompiled object files"
