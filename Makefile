@@ -14,7 +14,8 @@ CFLAGS		= -Wall -Wextra -Werror
 
 NAME		=
 
-SRC			= mlx_test.c rgb_to_hex.c
+SRC			= *.c
+# SRC			= mlx_main.c mlx_handle_keys.c rgb_to_hex.c
 
 OBJ			= $(SRC:.c=.o)
 
