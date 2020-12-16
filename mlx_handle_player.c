@@ -14,7 +14,14 @@
 
 void		draw_player_at_start(int color)
 {
-	draw_square(0, 0, 4, color);
+	int	x;
+	int	y;
+
+	x = MAP_TILE_SIZE * (MAP_WIDTH / 2);
+	y = MAP_TILE_SIZE * (MAP_HEIGHT / 2);
+	draw_square(x, y, 4, color);
+	player.x = x;
+	player.y = y;
 	// draw_square_image(0, 0, 4, color);
 }
 

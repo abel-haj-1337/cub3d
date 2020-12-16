@@ -24,11 +24,13 @@
 # define BLUE	rgb_to_hex(0, 0, 255)
 # define GREEN	rgb_to_hex(0, 255, 0)
 # define WHITE	rgb_to_hex(255, 255, 255)
+# define FOV	(60 * (M_PI / 180))
 # define MAP_WIDTH	24
 # define MAP_HEIGHT	24
 # define MAP_TILE_SIZE 24
 # define WINDOW_WIDTH	MAP_WIDTH * MAP_TILE_SIZE
 # define WINDOW_HEIGHT	MAP_HEIGHT * MAP_TILE_SIZE
+# define RAYS WINDOW_WIDTH
 
 typedef struct			s_mlx {
 	void				*mlx;
@@ -49,6 +51,17 @@ typedef struct			s_image {
 	// system architecture : big/little endian
 	int					endian;
 }						t_image;
+
+typedef struct			s_ray {
+	float				ray_agle;
+	float				wall_hit_x;
+	float				wall_hit_y;
+	float				distance;
+	int					was_hit_vertical;
+	int					is_ray_facing_up;
+	int					is_ray_facing_right;
+	int					wall_hit_content;
+}						t_ray;
 
 int						rgb_to_hex(int r, int g, int b);
 int						handle_keys(int key_code);

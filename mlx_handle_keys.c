@@ -14,7 +14,7 @@
 
 int			handle_keys(int key_code)
 {
-	printf("%d (line 94)\n", key_code);
+	// printf("%d (line 94)\n", key_code);
 
 	// quit
 	if (key_code == 12 || key_code == 53)
