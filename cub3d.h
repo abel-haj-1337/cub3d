@@ -40,6 +40,7 @@ typedef struct			s_mlx {
 typedef struct			s_player {
 	int					x;
 	int					y;
+	float				view_angle;
 }						t_player;
 
 typedef struct			s_image {
@@ -53,14 +54,16 @@ typedef struct			s_image {
 }						t_image;
 
 typedef struct			s_ray {
-	float				ray_agle;
-	float				wall_hit_x;
-	float				wall_hit_y;
-	float				distance;
-	int					was_hit_vertical;
-	int					is_ray_facing_up;
-	int					is_ray_facing_right;
-	int					wall_hit_content;
+    float				rayAngle;
+    float				wallHitX;
+    float				wallHitY;
+    float				distance;
+    int					wasHitVertical;
+    int					isRayFacingUp;
+    int					isRayFacingDown;
+    int					isRayFacingLeft;
+    int					isRayFacingRight;
+    int					wallHitContent;
 }						t_ray;
 
 int						rgb_to_hex(int r, int g, int b);
