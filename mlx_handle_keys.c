@@ -27,14 +27,14 @@ int			handle_keys(int key_code)
 		// move player to the left
 		if (player.x > 0)
 		{
-			move_player(-1, 0, BLUE);
+			move_player_by(-1, 0, BLUE);
 			// player.y -= 1;
 		}
 	}
 	// right
 	else if (key_code == 2)
 	{
-		move_player(1, 0, BLUE);
+		move_player_by(1, 0, BLUE);
 		// player.x += 1;
 	}
 	// top
@@ -42,14 +42,14 @@ int			handle_keys(int key_code)
 	{
 		if (player.y > 0)
 		{
-			move_player(0, -1, BLUE);
+			move_player_by(0, -1, BLUE);
 			// player.y -= 1;
 		}
 	}
 	// bottom
 	else if (key_code == 1 || key_code == 125)
 	{
-		move_player(0, 1, BLUE);
+		move_player_by(0, 1, BLUE);
 		// player.y += 1;
 	}
 

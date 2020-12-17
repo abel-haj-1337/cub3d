@@ -12,20 +12,14 @@
 
 #include "cub3d.h"
 
-void		draw_player_at_start(int color)
+void		init_player_at(int x, int y)
 {
-	int	x;
-	int	y;
-
-	x = MAP_TILE_SIZE * (MAP_WIDTH / 2);
-	y = MAP_TILE_SIZE * (MAP_HEIGHT / 2);
-	draw_square(x, y, 4, color);
 	player.x = x;
 	player.y = y;
-	// draw_square_image(0, 0, 4, color);
+	player.view_angle = M_PI / 2
 }
 
-void		move_player(int x, int y, int color)
+void		move_player_by(int x, int y, int color)
 {
 	// erase player
 	draw_square(player.x, player.y, 4, BLACK);
