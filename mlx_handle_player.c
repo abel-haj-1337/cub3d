@@ -18,6 +18,8 @@ void		init_player_at(int x, int y)
 	player.y = y;
 	// odd number
 	player.size = 7;
+	player.turn_speed = 50;
+	player.view_length = 75;
 	player.color = BLUE;
 
 	// 0 to 360
@@ -33,8 +35,8 @@ void		turn_move_player_by(int x, int y, int step)
 	draw_line(
 		player.x,
 		player.y,
-		player.x + cos(player.view_angle * M_PI / 180) * 25,
-		player.y + sin(player.view_angle * M_PI / 180) * 25,
+		player.x + (cos(player.view_angle * M_PI / 180) * player.view_length),
+		player.y + (sin(player.view_angle * M_PI / 180) * player.view_length),
 		BLACK);
 
 	player.x += x;
@@ -50,7 +52,7 @@ void		turn_move_player_by(int x, int y, int step)
 	draw_line(
 		player.x,
 		player.y,
-		player.x + cos(player.view_angle * M_PI / 180) * 25,
-		player.y + sin(player.view_angle * M_PI / 180) * 25,
+		player.x + (cos(player.view_angle * M_PI / 180) * player.view_length),
+		player.y + (sin(player.view_angle * M_PI / 180) * player.view_length),
 		YELLOW);
 }

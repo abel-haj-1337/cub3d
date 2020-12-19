@@ -52,6 +52,34 @@ void		draw_square_image(int posX, int posY, int width, int color)
 	mlx_put_image_to_window(mlx.mlx, mlx.win, image.img, posX, posY);
 }
 
+void		draw_my_line(int from_x, int from_y, int to_x, int to_y, int color)
+{
+	int		dx;
+	int		dy;
+	int		steps;
+	float	slope;
+
+	// distance between start point and end point in x axis
+	dx = to_x - from_x;
+
+	// distance between start point and end point in x axis
+	dy = to_y - from_y;
+
+	// number of steps to complete drawing the line
+	steps = (abs(dx) >= abs(dy)) ? abs(dx) : abs(dy);
+
+	// 
+	slope = dx / dy;
+
+	// increment x by (dx / steps)
+	while (steps > 0)
+	{
+		mlx_pixel_put(mlx.mlx, mlx.win, from_x, from_y, color);
+		from_x = round(from_x + dx / steps);
+		from_y = round(from_y + dy / steps);
+		steps--;
+	}
+}
 
 void		draw_line(int from_x, int from_y, int to_x, int to_y, int color)
 {
@@ -64,6 +92,7 @@ void		draw_line(int from_x, int from_y, int to_x, int to_y, int color)
 	int		dx;	// 
 	int		dy;	// 
 
+	// Get distance in each axis
 	dx = to_x - from_x;
 	dy = to_y - from_y;
 

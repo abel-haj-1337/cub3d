@@ -23,6 +23,37 @@ int		destroy_mlx(void)
 	return (0);
 }
 
+int			is_wall_at(float x, float y) {
+    if (x <= 0 || x >= WINDOW_WIDTH || y <= 0 || y >= WINDOW_HEIGHT) {
+        return 1;
+    }
+    int map_x = floor(x / MAP_TILE_SIZE);
+    int map_y = floor(y / MAP_TILE_SIZE);
+    return map[map_y][map_x] != 0;
+}
+
+float		distanceBetweenPoints(float x1, float y1, float x2, float y2) {
+    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
+float		fix_rad(float rad)
+{
+	rad = remainder(rad, M_PI * 2);
+	if (rad < 0)
+		rad = (M_PI * 2) + rad;
+	return (rad);
+}
+
+float		to_rad(float degree)
+{
+	return (degree * (M_PI / 180));
+}
+
+void		draw_ray(float ray_rad, int index)
+{
+	return;
+}
+
 void            my_mlx_pixel_put(int x, int y, int color, t_image image)
 {
     char    *dst;
@@ -84,32 +115,6 @@ printf("(%d, %d)\n", x, y);
 
 	// b++;
 // printf("line drawn from (%d,%d) to (%d,%d)\n", x, y, to_x, to_y);
-}
-
-int			is_wall_at(float x, float y) {
-    if (x < 0 || x > WINDOW_WIDTH || y < 0 || y > WINDOW_HEIGHT) {
-        return 1;
-    }
-    int mapGridIndexX = floor(x / MAP_TILE_SIZE);
-    int mapGridIndexY = floor(y / MAP_TILE_SIZE);
-    return map[mapGridIndexY][mapGridIndexX] != 0;
-}
-
-float		distanceBetweenPoints(float x1, float y1, float x2, float y2) {
-    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-}
-
-float		fix_rad(float rad)
-{
-	rad = remainder(rad, M_PI * 2);
-	if (rad < 0)
-		rad = (M_PI * 2) + rad;
-	return (rad);
-}
-
-void		draw_ray(float ray_rad, int index)
-{
-	return;
 }
 
 void		draw_rays()

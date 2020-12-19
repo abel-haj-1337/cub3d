@@ -44,8 +44,9 @@ typedef struct			s_player {
 	int					y;
 	int					color;
 	int					size;
+	int					view_length;
 	float				view_angle;
-	int					direction_length;
+	float				turn_speed;
 }						t_player;
 
 typedef struct			s_image {
@@ -84,6 +85,7 @@ void					my_mlx_pixel_put(int x, int y, int color, t_image image);
 void					draw_square_image(int posX, int posY, int width, int color);
 void					draw_square(int posX, int posY, int width, int color);
 void					draw_line(int from_x, int from_y, int to_x, int to_y, int color);
+void					draw_my_line(int from_x, int from_y, int to_x, int to_y, int color);
 
 int						destroy_mlx(void);
 
