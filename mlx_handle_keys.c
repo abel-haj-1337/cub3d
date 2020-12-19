@@ -21,37 +21,63 @@ int			handle_keys(int key_code)
 	{
 		destroy_mlx();
 	}
+
 	// left
-	else if (key_code == 0)
+	 if (key_code == 0)
 	{
 		// move player to the left
 		if (player.x > 0)
 		{
-			move_player_by(-1, 0, BLUE);
-			// player.y -= 1;
+			turn_move_player_by(-1, 0, 0);
 		}
 	}
+
 	// right
-	else if (key_code == 2)
+	 if (key_code == 2)
 	{
-		move_player_by(1, 0, BLUE);
-		// player.x += 1;
+		turn_move_player_by(1, 0, 0);
 	}
+
 	// top
-	else if (key_code == 13 || key_code == 126)
+	 if (key_code == 13 || key_code == 126)
 	{
 		if (player.y > 0)
 		{
-			move_player_by(0, -1, BLUE);
-			// player.y -= 1;
+			turn_move_player_by(0, -1, 0);
+	printf("player angle : %.2f %.2f \n", player.view_angle, player.view_angle * M_PI / 180);
+	printf("start x, y (%d,%d)\n", player.x, player.y);
+	printf("end   x, y (%.2f, %.2f)\n", player.x+cos(player.view_angle * M_PI / 180) * 25, player.y+cos(player.view_angle * M_PI / 180) * 25);
 		}
 	}
+
 	// bottom
-	else if (key_code == 1 || key_code == 125)
+	 if (key_code == 1 || key_code == 125)
 	{
-		move_player_by(0, 1, BLUE);
-		// player.y += 1;
+		turn_move_player_by(0, 1, 0);
+	printf("player angle : %.2f %.2f \n", player.view_angle, player.view_angle * M_PI / 180);
+	printf("start x, y (%d,%d)\n", player.x, player.y);
+	printf("end   x, y (%.2f, %.2f)\n", player.x+cos(player.view_angle * M_PI / 180) * 25, player.y+cos(player.view_angle * M_PI / 180) * 25);
 	}
+
+	// turn left
+	 if (key_code == 123)
+	{
+		turn_move_player_by(0, 0, 1);
+	printf("player angle : %.2f %.2f \n", player.view_angle, player.view_angle * M_PI / 180);
+	printf("start x, y (%d,%d)\n", player.x, player.y);
+	printf("end   x, y (%.2f, %.2f)\n", player.x+cos(player.view_angle * M_PI / 180) * 25, player.y+cos(player.view_angle * M_PI / 180) * 25);
+	}
+
+	// turn right
+	 if (key_code == 124)
+	{
+		turn_move_player_by(0, 0, -1);
+	printf("player angle : %.2f %.2f \n", player.view_angle, player.view_angle * M_PI / 180);
+	printf("start x, y (%d,%d)\n", player.x, player.y);
+	printf("end   x, y (%.2f, %.2f)\n", player.x+cos(player.view_angle * M_PI / 180) * 25, player.y+cos(player.view_angle * M_PI / 180) * 25);
+	}
+
+	// printf("%d\n", key_code);
 
 	return key_code;
 }
