@@ -16,18 +16,41 @@ void		init_player_at(int x, int y)
 {
 	player.x = x;
 	player.y = y;
-	player.view_angle = M_PI / 2
+	// odd number
+	player.size = 7;
+	player.color = BLUE;
+
+	// 0 to 360
+	player.view_angle = 90;
+	turn_move_player_by(0, 0, 0);
+	printf("%d\n", player.x);
+	printf("%d\n", player.x + (int)ceil(player.size / 2));
 }
 
-void		move_player_by(int x, int y, int color)
+void		turn_move_player_by(int x, int y, int step)
 {
-	// erase player
-	draw_square(player.x, player.y, 4, BLACK);
-	// draw_square_image(player.x, player.y, 4, BLACK);
+	draw_square(player.x - ceil(player.size / 2), player.y - ceil(player.size / 2), player.size, BLACK);
+	draw_line(
+		player.x,
+		player.y,
+		player.x + cos(player.view_angle * M_PI / 180) * 25,
+		player.y + sin(player.view_angle * M_PI / 180) * 25,
+		BLACK);
 
-	// draw new player
 	player.x += x;
 	player.y += y;
-	draw_square(player.x, player.y, 4, color);
-	// draw_square_image(player.x, player.y, 4, color);
+	player.view_angle += step;
+
+	if (player.view_angle <= 0)
+		player.view_angle = 360;
+	else if (player.view_angle > 360)
+		player.view_angle = 1;
+
+	draw_square(player.x - ceil(player.size / 2), player.y - ceil(player.size / 2), player.size, BLUE);
+	draw_line(
+		player.x,
+		player.y,
+		player.x + cos(player.view_angle * M_PI / 180) * 25,
+		player.y + sin(player.view_angle * M_PI / 180) * 25,
+		YELLOW);
 }

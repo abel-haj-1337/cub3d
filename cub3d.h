@@ -18,11 +18,13 @@
 # include <math.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <float.h>
 
 # define BLACK	rgb_to_hex(0, 0, 0)
 # define RED	rgb_to_hex(255, 0, 0)
 # define BLUE	rgb_to_hex(0, 0, 255)
 # define GREEN	rgb_to_hex(0, 255, 0)
+# define YELLOW	rgb_to_hex(255, 255, 0)
 # define WHITE	rgb_to_hex(255, 255, 255)
 # define FOV	(60 * (M_PI / 180))
 # define MAP_WIDTH	24
@@ -40,7 +42,10 @@ typedef struct			s_mlx {
 typedef struct			s_player {
 	int					x;
 	int					y;
+	int					color;
+	int					size;
 	float				view_angle;
+	int					direction_length;
 }						t_player;
 
 typedef struct			s_image {
@@ -67,11 +72,19 @@ typedef struct			s_ray {
 }						t_ray;
 
 int						rgb_to_hex(int r, int g, int b);
+
 int						handle_keys(int key_code);
-void					move_player(int x, int y, int color);
-void					draw_player_at_start(int color);
+
+void					init_player_at(int x, int y);
+// void					move_player_by(int x, int y);
+// void					turn_player_by(int step);
+void					turn_move_player_by(int x, int y, int step);
+
+void					my_mlx_pixel_put(int x, int y, int color, t_image image);
 void					draw_square_image(int posX, int posY, int width, int color);
 void					draw_square(int posX, int posY, int width, int color);
+void					draw_line(int from_x, int from_y, int to_x, int to_y, int color);
+
 int						destroy_mlx(void);
 
 t_mlx					mlx;
