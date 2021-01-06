@@ -40,6 +40,24 @@ char	*ft_strchr(char *s, int c)
 	return (NULL);
 }
 
+int		ft_my_strchr(char *s, int c)
+{
+	size_t	i;
+	size_t	len;
+
+	i = 0;
+	len = ft_strlen(s);
+	if (c == 0)
+		return (len);
+	while (len > i)
+	{
+		if (s[i] == (char)c)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
 char	*ft_strdup(char *s)
 {
 	size_t	i;
@@ -48,7 +66,7 @@ char	*ft_strdup(char *s)
 
 	i = 0;
 	len = ft_strlen(s);
-	new_s = malloc(len + 1);
+	new_s = (char *)malloc(len + 1);
 	while (len > i)
 	{
 		new_s[i] = s[i];
@@ -68,7 +86,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	i = 0;
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
-	new_str = malloc(len1 + len2 + 1);
+	new_str = (char *)malloc(len1 + len2 + 1);
 	while (len1 + len2 > i)
 	{
 		if (len1 > i)

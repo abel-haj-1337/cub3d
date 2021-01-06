@@ -22,9 +22,25 @@ static int		free_and_return(char *fs, char *ss, int ret)
 	return (ret);
 }
 
-void			func(void)
+int				func(char ***ln, char **lf, int srch)
 {
-	*left = NULL;
+	char			*tmp;
+	char			*tmp_2;
+
+	tmp_2 = *lf;
+	*(tmp_2 + srch) = 0;
+	tmp = **ln;
+	// copying left to line
+	**ln = ft_strdup(*lf);
+	// freeing up old value
+	free(tmp);
+	// backing up old value
+	tmp = *lf;
+	// backing up whats left
+	*lf = ft_strdup(*lf + srch + 1);
+	// freeing up old value
+	free(tmp);
+	return (1);
 }
 
 int				get_next_line(char **line, int fd)
@@ -32,6 +48,7 @@ int				get_next_line(char **line, int fd)
 	int				result;
 	char			*tmp;
 	char			*srch;
+	int				srch_2;
 	char			reader[1001];
 	static char		*left;
 
@@ -39,22 +56,14 @@ int				get_next_line(char **line, int fd)
 		return (-1);
 	if (left)
 	{
-		if ((srch = ft_strchr(left, '\n')))
-		{
-			*srch = '\0';
-			tmp = *line;
-			*line = ft_strdup(left);
-			free(tmp);
-			tmp = left;
-			left = ft_strdup(srch + 1);
-			free(tmp);
-			return (1);
-		}
+		if ((srch_2 = ft_my_strchr(left, '\n')) != -1)
+			return func(&line, &left, srch_2);
 		tmp = *line;
 		*line = ft_strdup(left);
-		free(tmp);
-		free(left);
-		left = NULL;
+		free_and_return(tmp, left, 0);
+		// free(tmp);
+		// free(left);
+		// left = NULL;
 	}
 	while ((result = read(fd, &reader, 1000)))
 	{
