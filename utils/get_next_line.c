@@ -58,7 +58,7 @@ int				get_next_line(char **line, int fd)
 	char		reader[101];
 	static char	*left;
 
-	if (!line || !(*line = ft_strdup("")))
+	if (!line || !(*line = ft_strdup("")) || read(fd, NULL, 0) < 0)
 		return (-1);
 	if (left)
 		if (part_one(&line, &left) == 1)

@@ -23,5 +23,6 @@ char		*ft_strchr(char *s, int c);
 int			ft_my_strchr(char *s, int c);
 char		*ft_strdup(char *s);
 char		*ft_strjoin(char *s1, char *s2);
+int			get_next_line(char **line, int fd);
 
 #endif
