@@ -10,95 +10,67 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "utils.h"
 
-static int		free_and_return(char *fs, char *ss, int ret)
+static int		part_one(char ***ln, char **lf)
 {
-	free(fs);
-	free(ss);
-	fs = NULL;
-	ss = NULL;
-	return (ret);
-}
-
-int				func(char ***ln, char **lf, int srch)
-{
+	int				srch;
 	char			*tmp;
 	char			*tmp_2;
 
-	tmp_2 = *lf;
-	*(tmp_2 + srch) = 0;
+	if ((srch = ft_my_strchr(*lf, '\n')) != -1)
+	{
+		tmp_2 = *lf;
+		*(tmp_2 + srch) = 0;
+		tmp = **ln;
+		**ln = ft_strdup(*lf);
+		free(tmp);
+		tmp = *lf;
+		*lf = ft_strdup(*lf + srch + 1);
+		free(tmp);
+		return (1);
+	}
 	tmp = **ln;
-	// copying left to line
 	**ln = ft_strdup(*lf);
-	// freeing up old value
 	free(tmp);
-	// backing up old value
-	tmp = *lf;
-	// backing up whats left
-	*lf = ft_strdup(*lf + srch + 1);
-	// freeing up old value
+	free(*lf);
+	*lf = NULL;
+	return (0);
+}
+
+static int		part_two(char ***ln, char **lf, char *rdr, char **srch)
+{
+	char	*tmp;
+
+	**srch = '\0';
+	tmp = **ln;
+	**ln = ft_strjoin(**ln, rdr);
 	free(tmp);
+	*lf = ft_strdup(*srch + 1);
 	return (1);
 }
 
 int				get_next_line(char **line, int fd)
 {
-	int				result;
-	char			*tmp;
-	char			*srch;
-	int				srch_2;
-	char			reader[1001];
-	static char		*left;
+	int			result;
+	char		*srch;
+	char		*tmp;
+	char		reader[101];
+	static char	*left;
 
-	if (!(*line = ft_strdup("")) || !line)
+	if (!line || !(*line = ft_strdup("")))
 		return (-1);
 	if (left)
-	{
-		if ((srch_2 = ft_my_strchr(left, '\n')) != -1)
-			return func(&line, &left, srch_2);
-		tmp = *line;
-		*line = ft_strdup(left);
-		free_and_return(tmp, left, 0);
-		// free(tmp);
-		// free(left);
-		// left = NULL;
-	}
-	while ((result = read(fd, &reader, 1000)))
+		if (part_one(&line, &left) == 1)
+			return (1);
+	while ((result = read(fd, &reader, 100)))
 	{
 		reader[result] = 0;
 		if ((srch = ft_strchr(reader, '\n')))
-		{
-			*srch = '\0';
-			tmp = *line;
-			*line = ft_strjoin(*line, reader);
-			free(tmp);
-			left = ft_strdup(srch + 1);
-			return (1);
-		}
+			return (part_two(&line, &left, reader, &srch));
 		tmp = *line;
 		*line = ft_strjoin(*line, reader);
 		free(tmp);
 	}
-	return (0);
-}
-
-int				main(void)
-{
-	int		fd;
-	int		result;
-	char	*line;
-
-	result = 0;
-	line = NULL;
-	fd = open("text.txt", O_RDONLY);
-	while ((result = get_next_line(&line, fd)) > 0)
-	{
-		printf("%s\n", line);
-		free(line);
-	}
-	printf("%s", line);
-	free(line);
 	return (0);
 }
