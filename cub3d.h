@@ -34,6 +34,21 @@
 # define WINDOW_HEIGHT	MAP_HEIGHT * MAP_TILE_SIZE
 # define RAYS WINDOW_WIDTH
 
+typedef struct	s_map_conf
+{
+	int			w_x;
+	int			w_y;
+	int			ceiling;
+	int			floor;
+	char		*north;
+	char		*south;
+	char		*east;
+	char		*west;
+	int			p_x;
+	int			p_y;
+	char		p_dir;
+}				t_map_conf;
+
 typedef struct			s_mlx {
 	void				*mlx;
 	void				*win;

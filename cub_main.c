@@ -52,10 +52,11 @@ static int		ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-int				handle_file(int fd)
+t_map_conf		handle_file(int fd)
 {
-	int		result;
-	char	*line;
+	int			result;
+	char		*line;
+	t_map_conf	conf;
 
 	line = NULL;
 	// read from file
@@ -69,12 +70,13 @@ int				handle_file(int fd)
 	// validate data in file
 	// store data
 	close(fd);
-	return (1);
+	return (conf);
 }
 
 int				main(int argc, char *argv[])
 {
-	int		fd;
+	int			fd;
+	t_map_conf	conf;
 
 	if (argc > 1)
 	{
@@ -87,38 +89,30 @@ int				main(int argc, char *argv[])
 			return (0);
 		}
 		// read, validate and store data
-		if (handle_file(fd) != 0)
+		conf = handle_file(fd);
+		// launch and play
+		if (argc == 2)
 		{
-			// launch and play
-			if (argc == 2)
+			// 
+		}
+		// launch and screenshot (launch?)
+		else if (argc == 3)
+		{
+			// argument correct
+			if (!ft_strcmp(argv[2], "--save"))
 			{
-				// 
+				// take screenshot
 			}
-			// launch and screenshot (launch?)
-			else if (argc == 3)
-			{
-				// argument correct
-				if (!ft_strcmp(argv[2], "--save"))
-				{
-					// take screenshot
-				}
-				// argument incorrect
-				else
-				{
-					ft_puterr(101);
-				}
-			}
-			// extra arguments
+			// argument incorrect
 			else
 			{
-				ft_puterr(102);
+				ft_puterr(101);
 			}
 		}
-		// if file is invalid
+		// extra arguments
 		else
 		{
-			ft_puterr(200);
-			return (0);
+			ft_puterr(102);
 		}
 	}
 	// no arguments
