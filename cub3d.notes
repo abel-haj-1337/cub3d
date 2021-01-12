@@ -1,14 +1,38 @@
-complete pikuma course
-	get account
-learn put image
-render map
-render player
-render rays
+STRUCTURE
+
+Open file
+Read from file
+	validate data
+		free and return <- invalid data
+	store data <- valid data
+		Launch game
+			play
+				Free n exit
+			save screenshot
+				Free n exit
+Fin
 
 
-Degree or Radian?
 
-Draw player
+TO DO
+
+- complete pikuma course
+	x get account
+	- watch js course
+		- 2d
+		- 3d
+	- watch c course
+		x 2d
+		- 3d
+- learn put image
+- render map
+- render player
+- render rays
+
+
+x Degree or Radian?
+
+x Draw player
 	rotate angle?
 
 Draw map
