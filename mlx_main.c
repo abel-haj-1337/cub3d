@@ -15,25 +15,17 @@
 int a = 0;
 int b = 0;
 
-int		destroy_mlx(void)
-{
-	mlx_clear_window(mlx.mlx, mlx.win);
-	mlx_destroy_window(mlx.mlx, mlx.win);
-	exit(0);
-	return (0);
-}
-
 int			is_wall_at(float x, float y) {
-    if (x <= 0 || x >= WINDOW_WIDTH || y <= 0 || y >= WINDOW_HEIGHT) {
-        return 1;
-    }
-    int map_x = floor(x / MAP_TILE_SIZE);
-    int map_y = floor(y / MAP_TILE_SIZE);
-    return map[map_y][map_x] != 0;
+	if (x <= 0 || x >= WINDOW_WIDTH || y <= 0 || y >= WINDOW_HEIGHT) {
+		return 1;
+	}
+	int map_x = floor(x / MAP_TILE_SIZE);
+	int map_y = floor(y / MAP_TILE_SIZE);
+	return map[map_y][map_x] != 0;
 }
 
 float		distanceBetweenPoints(float x1, float y1, float x2, float y2) {
-    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+	return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
 float		fix_rad(float rad)
@@ -52,14 +44,6 @@ float		to_rad(float degree)
 void		draw_ray(float ray_rad, int index)
 {
 	return;
-}
-
-void            my_mlx_pixel_put(int x, int y, int color, t_image image)
-{
-    char    *dst;
-
-    dst = image.addr + (y * image.line_height + x * (image.bpp / 8));
-    *(unsigned int*)dst = color;
 }
 
 void		draw_map(int wall_color)
@@ -92,26 +76,26 @@ void		draw_line_2(int from_x, int from_y, int to_x, int to_y, int color)
 	int		D;
 
 	// Calculate "deltas" of the line (difference between two ending points)
-    dx = to_x - from_x;
-    dy = to_y - from_y;
+	dx = to_x - from_x;
+	dy = to_y - from_y;
 
-    // Calculate the line equation based on deltas
-    D = (2 * dy) - dx;
+	// Calculate the line equation based on deltas
+	D = (2 * dy) - dx;
 	y = from_y;
 
-    // Draw the line based on arguments provided
-    for (x = from_x; x < to_x; x++)
-    {
-        // Place pixel on the raster display
-        mlx_pixel_put(mlx.mlx, mlx.win, x, y, color);
+	// Draw the line based on arguments provided
+	for (x = from_x; x < to_x; x++)
+	{
+		// Place pixel on the raster display
+		mlx_pixel_put(mlx.mlx, mlx.win, x, y, color);
 printf("(%d, %d)\n", x, y);
-        if (D >= 0)
-        {
-             y = y + 1;
-             D = D - 2 * dx;
-        }
-        D = D + 2 * dy;
-    }
+		if (D >= 0)
+		{
+			y = y + 1;
+			D = D - 2 * dx;
+		}
+		D = D + 2 * dy;
+	}
 
 	// b++;
 // printf("line drawn from (%d,%d) to (%d,%d)\n", x, y, to_x, to_y);
