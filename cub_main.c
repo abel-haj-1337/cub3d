@@ -1,18 +1,5 @@
-#include <stdio.h>
 #include "utils/utils.h"
 #include "cub3d.h"
-
-static void		ft_putstr(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		write(1, &str[i], 1);
-		i++;
-	}
-}
 
 static void		ft_puterr(int errn)
 {
@@ -20,36 +7,85 @@ static void		ft_puterr(int errn)
 	// 100 - 199
 	// program arguments errors
 	if (errn <= 199)
+	{
 		if (errn == 100)
-			ft_putstr("Wrong path provided! Configuration file was not found.");
+			ft_putstr("Wrong path provided! Configuration file was not found.\n");
 		else if (errn == 101)
-			ft_putstr("Invalid arguments! did you mean '--save'?");
+			ft_putstr("Invalid arguments! did you mean '--save'?\n");
 		else if (errn == 102)
-			ft_putstr("Too much arguments provided!");
+			ft_putstr("Too few arguments provided!\n");
 		else if (errn == 103)
-			ft_putstr("Too few arguments provided!");
+			ft_putstr("Too much arguments provided!\n");
+	}
 	// 200 - 299
-	// errors
+	// config file errors
 	else if (errn <= 299)
+	{
 		if (errn == 200)
-			ft_putstr("An error encountered!");
+			ft_putstr("An error encountered!\n");
+		else if (errn == 201)
+			ft_putstr("Bad configuration!\n");
+	}
 	else
-		ft_putstr("An unregisterd error encountered!");
-	
+		ft_putstr("An unregisterd error encountered!\n");
 }
 
-static int		ft_strcmp(char *s1, char *s2)
+int				ft_pplen(char **ps)
 {
 	int		i;
-	
+
 	i = 0;
-	while (s1[i] && s2[i])
+	while (ps[i])
 	{
-		if (s1[i] != s2[i])
-			return (s1[i] - s2[i]);
 		i++;
 	}
-	return (s1[i] - s2[i]);
+	return (i);
+}
+
+int				check_identifier(char *id)
+{
+	if (!ft_strcmp(id, "C") || !ft_strcmp(id, "EA") ||
+		!ft_strcmp(id, "F") || !ft_strcmp(id, "NO") || 
+		!ft_strcmp(id, "R") || !ft_strcmp(id, "S") || 
+		!ft_strcmp(id, "SO") || !ft_strcmp(id, "WE"))
+		return (1);
+	return (0);
+}
+
+void			handle_line(char *line)
+{
+	int		len;
+	char	**infos;
+
+	infos = ft_split(line, ' ');
+	len = ft_pplen(infos);
+	// empty line
+	if (len == 0)
+	{
+		// skip
+	}
+	else if (len <= 3)
+	{
+		// is information
+		if (check_identifier(*infos))
+		{}
+		// is map
+		else if ()
+		{
+			// is order correct
+		}
+		else
+		{
+			
+		}
+		
+	}
+	// incorrect information
+	else if (len > 3)
+	{
+		// bad conf
+		ft_puterr(201);
+	}
 }
 
 t_map_conf		handle_file(int fd)
@@ -62,10 +98,13 @@ t_map_conf		handle_file(int fd)
 	// read from file
 	while ((result = get_next_line(&line, fd)) > 0)
 	{
-		printf("%s\n", line);
+		handle_line(line);
+		ft_putstr(line);
+		ft_putstr("\n");
 		free(line);
 	}
-	printf("%s", line);
+	ft_putstr(line);
+	ft_putstr("\n");
 	free(line);
 	// validate data in file
 	// store data
@@ -73,51 +112,68 @@ t_map_conf		handle_file(int fd)
 	return (conf);
 }
 
+t_map_conf		init_map_conf()
+{
+	t_map_conf	c;
+
+	c.w_x = -1;
+	c.w_y = -1;
+	c.east = NULL;
+	c.north = NULL;
+	c.south = NULL;
+	c.west = NULL;
+	c.ceiling = -1;
+	c.floor = -1;
+	c.p_x = -1;
+	c.p_y = -1;
+	c.p_dir = -1;
+}
+
 int				main(int argc, char *argv[])
 {
 	int			fd;
 	t_map_conf	conf;
 
+	conf = init_map_conf();
 	if (argc > 1)
 	{
-		// open file
-		fd = open(argv[1], O_RDONLY);
 		// cannot open file
-		if (fd == -1)
+		if ((fd = open(argv[1], O_RDONLY)) == -1)
 		{
 			ft_puterr(100);
 			return (0);
 		}
 		// read, validate and store data
 		conf = handle_file(fd);
-		// launch and play
+		// only map
 		if (argc == 2)
 		{
-			// 
+			// launch n play
+			ft_putstr("play\n");
 		}
-		// launch and screenshot (launch?)
+		// map with save option
 		else if (argc == 3)
 		{
-			// argument correct
+			// launch n take screenshot
 			if (!ft_strcmp(argv[2], "--save"))
 			{
-				// take screenshot
+				// 
+				ft_putstr("take screenshot!\n");
 			}
-			// argument incorrect
 			else
 			{
 				ft_puterr(101);
 			}
 		}
-		// extra arguments
 		else
 		{
-			ft_puterr(102);
+			ft_puterr(103);
 		}
 	}
 	// no arguments
 	else
 	{
-		ft_puterr(103);
+		ft_puterr(102);
 	}
+	return (0);
 }

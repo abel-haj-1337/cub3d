@@ -46,7 +46,7 @@ typedef struct	s_map_conf
 	char		*west;
 	int			p_x;
 	int			p_y;
-	char		p_dir;
+	int			p_dir;
 }				t_map_conf;
 
 typedef struct			s_mlx {
