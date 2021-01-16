@@ -52,7 +52,23 @@ int				check_identifier(char *id)
 	return (0);
 }
 
-void			handle_line(char *line)
+void			ft_freesplitted(char **s, size_t len)
+{
+	while (len + 1 > 0)
+	{
+		free(s[len]);
+		len--;
+	}
+	free(s);
+	return (NULL);
+}
+
+int				rgb_char_to_int(char *rgb)
+{
+	return (0);
+}
+
+void			handle_line(char *line, t_map_conf conf)
 {
 	int		len;
 	char	**infos;
@@ -68,24 +84,71 @@ void			handle_line(char *line)
 	{
 		// is information
 		if (check_identifier(*infos))
-		{}
+		{
+			// which information
+			// store data
+			if (len == 2 && ft_strcmp(*infos, "C"))
+			{
+				conf.ceiling = rgb_to_int(infos[1]);
+			}
+			else if (len == 2 && ft_strcmp(*infos, "EA"))
+			{
+				conf.east = infos[1];
+			}
+			else if (len == 2 && ft_strcmp(*infos, "F"))
+			{
+				conf.floor = rgb_char_to_int(infos[1]);
+			}
+			else if (len == 2 && ft_strcmp(*infos, "NO"))
+			{
+				conf.north = infos[1];
+			}
+			else if (len == 3 && ft_strcmp(*infos, "R"))
+			{
+				conf.w_x = ft_atoi(infos[1]);
+				conf.w_y = ft_atoi(infos[2]);
+			}
+			else if (len == 2 && ft_strcmp(*infos, "S"))
+			{
+
+			}
+			else if (len == 2 && ft_strcmp(*infos, "SO"))
+			{
+				conf.south = infos[1];
+			}
+			else if (len == 2 && ft_strcmp(*infos, "WE"))
+			{
+				conf.west = infos[1];
+			}
+			else
+			{
+				// bad information
+				free(line);
+				ft_puterr(201);
+			}
+		}
 		// is map
-		else if ()
+		else if (check_map(*infos))
 		{
 			// is order correct
 		}
+		// forbidden data
 		else
 		{
-			
+			// 
+			free(line);
+			ft_puterr(201);
 		}
-		
 	}
 	// incorrect information
 	else if (len > 3)
 	{
 		// bad conf
+		free(line);
 		ft_puterr(201);
 	}
+	// free array
+	ft_freesplitted(infos, len);
 }
 
 t_map_conf		handle_file(int fd)
@@ -98,7 +161,7 @@ t_map_conf		handle_file(int fd)
 	// read from file
 	while ((result = get_next_line(&line, fd)) > 0)
 	{
-		handle_line(line);
+		handle_line(line, conf);
 		ft_putstr(line);
 		ft_putstr("\n");
 		free(line);
