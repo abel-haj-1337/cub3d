@@ -40,6 +40,7 @@ typedef struct	s_map_conf
 	int			w_y;
 	int			ceiling;
 	int			floor;
+	char		*sprite;
 	char		*north;
 	char		*south;
 	char		*east;
