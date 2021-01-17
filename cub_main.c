@@ -1,8 +1,8 @@
-#include "utils/utils.h"
 #include "cub3d.h"
 
 static void		ft_puterr(int errn)
 {
+// ft_putstr("exited puterr\n");
 	ft_putstr("Error\n");
 	// 100 - 199
 	// program arguments errors
@@ -25,13 +25,28 @@ static void		ft_puterr(int errn)
 			ft_putstr("An error encountered!\n");
 		else if (errn == 201)
 			ft_putstr("Bad configuration!\n");
+		else if (errn == 202)
+			ft_putstr("Bad identifier or incorrect information!\n");
+		else if (errn == 203)
+			ft_putstr("East wall texture was not found!\n");
+		else if (errn == 204)
+			ft_putstr("North wall texture was not found!\n");
+		else if (errn == 205)
+			ft_putstr("Sprite texture was not found!\n");
+		else if (errn == 206)
+			ft_putstr("South wall texture was not found!\n");
+		else if (errn == 207)
+			ft_putstr("West wall texture was not found!\n");
 	}
 	else
 		ft_putstr("An unregisterd error encountered!\n");
+// ft_putstr("exited puterr\n");
+	exit(0);
 }
 
 int				ft_pplen(char **ps)
 {
+// ft_putstr("entered ft_pplen\n");
 	int		i;
 
 	i = 0;
@@ -40,36 +55,63 @@ int				ft_pplen(char **ps)
 		i++;
 	}
 	return (i);
+// ft_putstr("exited ft_pplen\n");
 }
 
 int				check_identifier(char *id)
 {
+// ft_putstr("entered check_identifier\n");
 	if (!ft_strcmp(id, "C") || !ft_strcmp(id, "EA") ||
 		!ft_strcmp(id, "F") || !ft_strcmp(id, "NO") || 
 		!ft_strcmp(id, "R") || !ft_strcmp(id, "S") || 
 		!ft_strcmp(id, "SO") || !ft_strcmp(id, "WE"))
 		return (1);
 	return (0);
+// ft_putstr("exited check_identifier\n");
 }
 
 void			ft_freesplitted(char **s, size_t len)
 {
+// ft_putstr("entered ft_freesplitted\n");
 	while (len + 1 > 0)
 	{
 		free(s[len]);
 		len--;
 	}
 	free(s);
-	return (NULL);
+// ft_putstr("exited ft_freesplitted\n");
 }
 
 int				rgb_char_to_int(char *rgb)
 {
-	return (0);
+	int		color;
+	char	**colors;
+
+	colors = ft_split(rgb, ',');
+	color = rgb_to_hex(ft_atoi(colors[0]), ft_atoi(colors[1]), ft_atoi(colors[2]));
+	ft_freesplitted(colors, 3);
+	return (color);
+// ft_putstr("exited rgb_char_to_int\n");
+}
+
+int				check_map(char *m)
+{
+// ft_putstr("entered check_map\n");
+	write(1, &m[0], 1);
+	if (*m == '1' || *m == '2')
+	{
+		return (1);
+	}
+	else
+	{
+		return (0);
+	}
+// ft_putstr("exited check_map\n");
 }
 
 void			handle_line(char *line, t_map_conf conf)
 {
+// ft_putstr("entered handle_line\n");
 	int		len;
 	char	**infos;
 
@@ -80,6 +122,7 @@ void			handle_line(char *line, t_map_conf conf)
 	{
 		// skip
 	}
+	// 1 2 3
 	else if (len <= 3)
 	{
 		// is information
@@ -87,55 +130,95 @@ void			handle_line(char *line, t_map_conf conf)
 		{
 			// which information
 			// store data
-			if (len == 2 && ft_strcmp(*infos, "C"))
+			// TODO:
+			// 		handle duplicate information
+			// 		verify file location
+			// 		convert rgb to int
+			// 		handle resolution
+			if (len == 2 && !ft_strcmp(*infos, "C"))
 			{
-				conf.ceiling = rgb_to_int(infos[1]);
+				conf.ceiling = rgb_char_to_int(infos[1]);
+				ft_putstr("ceiling good!\n");
 			}
-			else if (len == 2 && ft_strcmp(*infos, "EA"))
+			else if (len == 2 && !ft_strcmp(*infos, "EA"))
 			{
 				conf.east = infos[1];
+				if (open(conf.east, O_RDONLY) == -1)
+					{
+						free(line);
+						ft_puterr(203);
+					}
+				ft_putstr("east good!\n");
 			}
-			else if (len == 2 && ft_strcmp(*infos, "F"))
+			else if (len == 2 && !ft_strcmp(*infos, "F"))
 			{
 				conf.floor = rgb_char_to_int(infos[1]);
+				ft_putstr("floor good!\n");
 			}
-			else if (len == 2 && ft_strcmp(*infos, "NO"))
+			else if (len == 2 && !ft_strcmp(*infos, "NO"))
 			{
 				conf.north = infos[1];
+				if (open(conf.north, O_RDONLY) == -1)
+					{
+						free(line);
+						ft_puterr(204);
+					}
+				ft_putstr("north good!\n");
 			}
-			else if (len == 3 && ft_strcmp(*infos, "R"))
+			else if (len == 3 && !ft_strcmp(*infos, "R"))
 			{
 				conf.w_x = ft_atoi(infos[1]);
 				conf.w_y = ft_atoi(infos[2]);
+				ft_putstr("resolution good!\n");
 			}
-			else if (len == 2 && ft_strcmp(*infos, "S"))
+			else if (len == 2 && !ft_strcmp(*infos, "S"))
 			{
-
+				conf.sprite = infos[1];
+				if (open(conf.sprite, O_RDONLY) == -1)
+					{
+						free(line);
+						ft_puterr(205);
+					}
+				ft_putstr("sprite good!\n");
 			}
-			else if (len == 2 && ft_strcmp(*infos, "SO"))
+			else if (len == 2 && !ft_strcmp(*infos, "SO"))
 			{
 				conf.south = infos[1];
+				if (open(conf.south, O_RDONLY) == -1)
+					{
+						free(line);
+						ft_puterr(206);
+					}
+				ft_putstr("south good!\n");
 			}
-			else if (len == 2 && ft_strcmp(*infos, "WE"))
+			else if (len == 2 && !ft_strcmp(*infos, "WE"))
 			{
 				conf.west = infos[1];
+				if (open(conf.west, O_RDONLY) == -1)
+					{
+						free(line);
+						ft_puterr(207);
+					}
+				ft_putstr("west good!\n");
 			}
 			else
 			{
 				// bad information
 				free(line);
-				ft_puterr(201);
+				ft_puterr(202);
 			}
 		}
 		// is map
 		else if (check_map(*infos))
 		{
 			// is order correct
+			ft_putstr("map is good!\n");
 		}
 		// forbidden data
 		else
 		{
 			// 
+			ft_putstr("h");
 			free(line);
 			ft_puterr(201);
 		}
@@ -149,34 +232,12 @@ void			handle_line(char *line, t_map_conf conf)
 	}
 	// free array
 	ft_freesplitted(infos, len);
-}
-
-t_map_conf		handle_file(int fd)
-{
-	int			result;
-	char		*line;
-	t_map_conf	conf;
-
-	line = NULL;
-	// read from file
-	while ((result = get_next_line(&line, fd)) > 0)
-	{
-		handle_line(line, conf);
-		ft_putstr(line);
-		ft_putstr("\n");
-		free(line);
-	}
-	ft_putstr(line);
-	ft_putstr("\n");
-	free(line);
-	// validate data in file
-	// store data
-	close(fd);
-	return (conf);
+// ft_putstr("exited handle_line\n");
 }
 
 t_map_conf		init_map_conf()
 {
+// ft_putstr("entered init_map_conf\n");
 	t_map_conf	c;
 
 	c.w_x = -1;
@@ -190,16 +251,50 @@ t_map_conf		init_map_conf()
 	c.p_x = -1;
 	c.p_y = -1;
 	c.p_dir = -1;
+	return (c);
+// ft_putstr("exited init_map_conf\n");
+}
+
+t_map_conf		handle_file(int fd)
+{
+// ft_putstr("entered handle_file\n");
+	int			result;
+	char		*line;
+	t_map_conf	conf;
+
+	line = NULL;
+	// read from file
+	conf = init_map_conf();
+	while ((result = get_next_line(&line, fd)) > 0)
+	{
+		ft_putstr("line:|");
+		ft_putstr(line);
+		ft_putstr("|\n");
+		handle_line(line, conf);
+		free(line);
+	}
+	ft_putstr("line:|");
+	ft_putstr(line);
+	ft_putstr("|\n");
+	handle_line(line, conf);
+	free(line);
+	// validate data in file
+	// store data
+	close(fd);
+	return (conf);
+// ft_putstr("exited handle_file\n");
 }
 
 int				main(int argc, char *argv[])
 {
+// ft_putstr("entered main\n");
 	int			fd;
 	t_map_conf	conf;
 
 	conf = init_map_conf();
 	if (argc > 1)
 	{
+		// ft_putstr(argv[1]);
 		// cannot open file
 		if ((fd = open(argv[1], O_RDONLY)) == -1)
 		{
@@ -239,4 +334,5 @@ int				main(int argc, char *argv[])
 		ft_puterr(102);
 	}
 	return (0);
+// ft_putstr("exited main\n");
 }

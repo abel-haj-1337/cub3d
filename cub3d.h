@@ -19,6 +19,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <float.h>
+# include "utils/utils.h"
 
 # define BLACK	rgb_to_hex(0, 0, 0)
 # define RED	rgb_to_hex(255, 0, 0)
@@ -105,11 +106,11 @@ void					draw_my_line(int from_x, int from_y, int to_x, int to_y, int color);
 
 int						destroy_mlx(void);
 
-t_mlx					mlx;
-t_player				player;
+static t_mlx					mlx;
+static t_player				player;
 // t_image					image;
 
-static const int 		map[MAP_WIDTH][MAP_HEIGHT]=
+static int						map[MAP_WIDTH][MAP_HEIGHT]=
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
