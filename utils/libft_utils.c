@@ -38,7 +38,7 @@ int				ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-char	*ft_substr(char *s, int start, size_t len)
+char			*ft_substr(char *s, int start, size_t len)
 {
 	size_t	i;
 	char	*string;
@@ -58,7 +58,7 @@ char	*ft_substr(char *s, int start, size_t len)
 	return (string);
 }
 
-int		ft_atoi(char *str)
+int				ft_atoi(char *str)
 {
 	int				i;
 	int				sign;
@@ -85,4 +85,25 @@ int		ft_atoi(char *str)
 	else if (result > 9223372036854775807 && sign == -1)
 		return (0);
 	return ((int)result * sign);
+}
+
+void			ft_putnbr(int n)
+{
+	size_t result;
+
+	result = 0;
+	if (n < 0)
+	{
+		write(1, (void *)'-', 1);
+		result = -((size_t)n);
+	}
+	else
+		result = n;
+	if (result < 10)
+		write(1, (void *)result + 48, 1);
+	else
+	{
+		ft_putnbr(result / 10);
+		write(1, (void *)(result % 10) + 48, 1);
+	}
 }

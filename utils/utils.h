@@ -20,6 +20,7 @@
 
 int			ft_atoi(char *str);
 int			ft_my_strchr(char *s, int c);
+void		ft_putnbr(int n);
 void		ft_putstr(char *str);
 char		**ft_split(char *s, char c);
 char		*ft_strdup(char *s);
