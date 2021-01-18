@@ -106,8 +106,9 @@ void					draw_my_line(int from_x, int from_y, int to_x, int to_y, int color);
 
 int						destroy_mlx(void);
 
-static t_mlx					mlx;
-static t_player				player;
+static t_mlx			mlx;
+static t_player			player;
+static t_map_conf		conf;
 // t_image					image;
 
 static int						map[MAP_WIDTH][MAP_HEIGHT]=
