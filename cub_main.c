@@ -109,7 +109,7 @@ int				check_map(char *m)
 // ft_putstr("exited check_map\n");
 }
 
-void			handle_line(char *line, t_map_conf conf)
+void			handle_line(char *line)
 {
 // ft_putstr("entered handle_line\n");
 	int		len;
@@ -129,10 +129,8 @@ void			handle_line(char *line, t_map_conf conf)
 		if (check_identifier(*infos))
 		{
 			// which information
-			// store data
 			// TODO:
 			// 		handle duplicate information
-			// 		verify file location
 			// 		convert rgb to int
 			// 		handle resolution
 			if (len == 2 && !ft_strcmp(*infos, "C"))
@@ -186,6 +184,7 @@ void			handle_line(char *line, t_map_conf conf)
 				conf.south = infos[1];
 				if (open(conf.south, O_RDONLY) == -1)
 					{
+						// ft_freesplitted(infos, len);
 						free(line);
 						ft_puterr(206);
 					}
@@ -235,63 +234,73 @@ void			handle_line(char *line, t_map_conf conf)
 // ft_putstr("exited handle_line\n");
 }
 
-t_map_conf		init_map_conf()
+void			init_map_conf()
 {
 // ft_putstr("entered init_map_conf\n");
-	t_map_conf	c;
 
-	c.w_x = -1;
-	c.w_y = -1;
-	c.east = NULL;
-	c.north = NULL;
-	c.south = NULL;
-	c.west = NULL;
-	c.ceiling = -1;
-	c.floor = -1;
-	c.p_x = -1;
-	c.p_y = -1;
-	c.p_dir = -1;
-	return (c);
+	conf.w_x = -1;
+	conf.w_y = -1;
+	conf.east = NULL;
+	conf.north = NULL;
+	conf.south = NULL;
+	conf.west = NULL;
+	conf.ceiling = -1;
+	conf.floor = -1;
+	conf.p_x = -1;
+	conf.p_y = -1;
+	conf.p_dir = -1;
 // ft_putstr("exited init_map_conf\n");
 }
 
-t_map_conf		handle_file(int fd)
+void			handle_file(int fd)
 {
 // ft_putstr("entered handle_file\n");
 	int			result;
 	char		*line;
-	t_map_conf	conf;
 
 	line = NULL;
 	// read from file
-	conf = init_map_conf();
+	init_map_conf();
 	while ((result = get_next_line(&line, fd)) > 0)
 	{
 		ft_putstr("line:|");
 		ft_putstr(line);
 		ft_putstr("|\n");
-		handle_line(line, conf);
+		handle_line(line);
 		free(line);
 	}
 	ft_putstr("line:|");
 	ft_putstr(line);
 	ft_putstr("|\n");
-	handle_line(line, conf);
+	handle_line(line);
 	free(line);
 	// validate data in file
 	// store data
 	close(fd);
-	return (conf);
 // ft_putstr("exited handle_file\n");
+}
+
+void			ft_print_conf()
+{
+	printf("window width is %d\n", conf.w_x);
+	printf("window height is %d\n", conf.w_y);
+	printf("east texture is %s\n", conf.east);
+	printf("north texture is %s\n", conf.north);
+	printf("south texture is %s\n", conf.south);
+	printf("west texture is %s\n", conf.west);
+	printf("eiling color is %d\n", conf.ceiling);
+	printf("floor color is %d\n", conf.floor);
+	printf("player x is %d\n", conf.p_x);
+	printf("player y is %d\n", conf.p_y);
+	printf("player direction is %d\n", conf.p_dir);
 }
 
 int				main(int argc, char *argv[])
 {
 // ft_putstr("entered main\n");
 	int			fd;
-	t_map_conf	conf;
 
-	conf = init_map_conf();
+	init_map_conf();
 	if (argc > 1)
 	{
 		// ft_putstr(argv[1]);
@@ -302,12 +311,13 @@ int				main(int argc, char *argv[])
 			return (0);
 		}
 		// read, validate and store data
-		conf = handle_file(fd);
+		handle_file(fd);
 		// only map
 		if (argc == 2)
 		{
 			// launch n play
 			ft_putstr("play\n");
+			ft_print_conf();
 		}
 		// map with save option
 		else if (argc == 3)
