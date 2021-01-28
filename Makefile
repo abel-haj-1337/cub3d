@@ -39,6 +39,7 @@ $(NAME)		:
 		-L /usr/lib/ -lz -framework OpenGL -framework AppKit && \
 		export ASAN_OPTIONS=detect_leaks=1 && \
 		echo "\033[1;33mCompiling object files...\033[0;39m"
+	# @/goinfre/abel-haj/.brew//Cellar/llvm/11.0.0/bin/clang \
 
 clean		:
 	@rm -rf $(NAME) $(OBJ) a.out && echo "\033[1;31mcleaning...\033[0;39m"

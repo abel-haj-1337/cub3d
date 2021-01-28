@@ -2,7 +2,6 @@
 
 static void		ft_puterr(int errn)
 {
-// ft_putstr("exited puterr\n");
 	ft_putstr("Error\n");
 	// 100 - 199
 	// program arguments errors
@@ -37,10 +36,13 @@ static void		ft_puterr(int errn)
 			ft_putstr("South wall texture was not found!\n");
 		else if (errn == 207)
 			ft_putstr("West wall texture was not found!\n");
+		else if (errn == 208)
+			ft_putstr("Forbidden spaces in information!\n");
+		else if (errn == 209)
+			ft_putstr("Incorrect or forbidden value in resolution!\n");
 	}
 	else
 		ft_putstr("An unregisterd error encountered!\n");
-// ft_putstr("exited puterr\n");
 	exit(0);
 }
 
@@ -109,6 +111,13 @@ int				check_map(char *m)
 // ft_putstr("exited check_map\n");
 }
 
+int				ft_isdigit(char c)
+{
+	if (c >= 48 && c <= 57)
+		return (1);
+	return (0);
+}
+
 void			handle_line(char *line)
 {
 // ft_putstr("entered handle_line\n");
@@ -141,12 +150,14 @@ void			handle_line(char *line)
 			else if (len == 2 && !ft_strcmp(*infos, "EA"))
 			{
 				conf.east = infos[1];
-				if (open(conf.east, O_RDONLY) == -1)
-					{
-						free(line);
-						ft_puterr(203);
-					}
-				ft_putstr("east good!\n");
+				// file not found
+				if (open(conf.east, O_RDONLY) != -1)
+					ft_putstr("east good!\n");
+				else
+				{
+					free(line);
+					ft_puterr(203);
+				}
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "F"))
 			{
@@ -156,49 +167,63 @@ void			handle_line(char *line)
 			else if (len == 2 && !ft_strcmp(*infos, "NO"))
 			{
 				conf.north = infos[1];
-				if (open(conf.north, O_RDONLY) == -1)
-					{
-						free(line);
-						ft_puterr(204);
-					}
-				ft_putstr("north good!\n");
+				// file not found
+				if (open(conf.north, O_RDONLY) != -1)
+					ft_putstr("north good!\n");
+				else
+				{
+					free(line);
+					ft_puterr(204);
+				}
 			}
 			else if (len == 3 && !ft_strcmp(*infos, "R"))
 			{
 				conf.w_x = ft_atoi(infos[1]);
 				conf.w_y = ft_atoi(infos[2]);
-				ft_putstr("resolution good!\n");
+				if (*infos[1] != '-' && *infos[2] != '-' && ft_isdigit(*infos[1]) && ft_isdigit(*infos[2]))
+					ft_putstr("resolution good!\n");
+				else
+				{
+					free(line);
+					ft_puterr(209);
+				}
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "S"))
 			{
 				conf.sprite = infos[1];
-				if (open(conf.sprite, O_RDONLY) == -1)
-					{
-						free(line);
-						ft_puterr(205);
-					}
-				ft_putstr("sprite good!\n");
+				// file not found
+				if (open(conf.sprite, O_RDONLY) != -1)
+					ft_putstr("sprite good!\n");
+				else
+				{
+					free(line);
+					ft_puterr(205);
+				}
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "SO"))
 			{
 				conf.south = infos[1];
-				if (open(conf.south, O_RDONLY) == -1)
-					{
-						// ft_freesplitted(infos, len);
-						free(line);
-						ft_puterr(206);
-					}
-				ft_putstr("south good!\n");
+				// file not found
+				if (open(conf.south, O_RDONLY) != -1)
+					ft_putstr("south good!\n");
+				else
+				{
+					// ft_freesplitted(infos, len);
+					free(line);
+					ft_puterr(206);
+				}
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "WE"))
 			{
 				conf.west = infos[1];
-				if (open(conf.west, O_RDONLY) == -1)
-					{
-						free(line);
-						ft_puterr(207);
-					}
-				ft_putstr("west good!\n");
+				// file not found
+				if (open(conf.west, O_RDONLY) != -1)
+					ft_putstr("west good!\n");
+				else
+				{
+					free(line);
+					ft_puterr(207);
+				}
 			}
 			else
 			{
@@ -212,12 +237,13 @@ void			handle_line(char *line)
 		{
 			// is order correct
 			ft_putstr("map is good!\n");
+				// line contains information and begins or ends with spaces
 		}
 		// forbidden data
 		else
 		{
 			// 
-			ft_putstr("h");
+			// ft_putstr("h");
 			free(line);
 			ft_puterr(201);
 		}
@@ -230,7 +256,7 @@ void			handle_line(char *line)
 		ft_puterr(201);
 	}
 	// free array
-	ft_freesplitted(infos, len);
+	// ft_freesplitted(infos, len);
 // ft_putstr("exited handle_line\n");
 }
 
@@ -288,7 +314,7 @@ void			ft_print_conf()
 	printf("north texture is %s\n", conf.north);
 	printf("south texture is %s\n", conf.south);
 	printf("west texture is %s\n", conf.west);
-	printf("eiling color is %d\n", conf.ceiling);
+	printf("ceiling color is %d\n", conf.ceiling);
 	printf("floor color is %d\n", conf.floor);
 	printf("player x is %d\n", conf.p_x);
 	printf("player y is %d\n", conf.p_y);
