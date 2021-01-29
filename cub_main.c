@@ -40,6 +40,8 @@ static void		ft_puterr(int errn)
 			ft_putstr("Forbidden spaces in information!\n");
 		else if (errn == 209)
 			ft_putstr("Incorrect or forbidden value in resolution!\n");
+		else if (errn == 210)
+			ft_putstr("Incorrect ceiling color!\n");
 	}
 	else
 		ft_putstr("An unregisterd error encountered!\n");
@@ -48,7 +50,6 @@ static void		ft_puterr(int errn)
 
 int				ft_pplen(char **ps)
 {
-// ft_putstr("entered ft_pplen\n");
 	int		i;
 
 	i = 0;
@@ -57,31 +58,43 @@ int				ft_pplen(char **ps)
 		i++;
 	}
 	return (i);
-// ft_putstr("exited ft_pplen\n");
 }
 
 int				check_identifier(char *id)
 {
-// ft_putstr("entered check_identifier\n");
 	if (!ft_strcmp(id, "C") || !ft_strcmp(id, "EA") ||
 		!ft_strcmp(id, "F") || !ft_strcmp(id, "NO") || 
 		!ft_strcmp(id, "R") || !ft_strcmp(id, "S") || 
 		!ft_strcmp(id, "SO") || !ft_strcmp(id, "WE"))
 		return (1);
 	return (0);
-// ft_putstr("exited check_identifier\n");
 }
 
 void			ft_freesplitted(char **s, size_t len)
 {
-// ft_putstr("entered ft_freesplitted\n");
 	while (len + 1 > 0)
 	{
 		free(s[len]);
 		len--;
 	}
 	free(s);
-// ft_putstr("exited ft_freesplitted\n");
+}
+
+int				ft_strrgb(char *str)
+{
+	int		i;
+	int		len;
+	
+	i = 0;
+	if ((len = ft_strlen(str)) > 3)
+		return (0);
+	while (len > i)
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 int				rgb_char_to_int(char *rgb)
@@ -90,15 +103,19 @@ int				rgb_char_to_int(char *rgb)
 	char	**colors;
 
 	colors = ft_split(rgb, ',');
+	// check r g b
 	color = rgb_to_hex(ft_atoi(colors[0]), ft_atoi(colors[1]), ft_atoi(colors[2]));
+	// check if number
+	// check if forbidden character ('.', 'a', ...)
+	// check if 
+	if (!ft_strrgb(colors[0]) || !ft_strrgb(colors[1]) || !ft_strrgb(colors[2]))
+		color = -1;
 	ft_freesplitted(colors, 3);
 	return (color);
-// ft_putstr("exited rgb_char_to_int\n");
 }
 
 int				check_map(char *m)
 {
-// ft_putstr("entered check_map\n");
 	write(1, &m[0], 1);
 	if (*m == '1' || *m == '2')
 	{
@@ -108,7 +125,6 @@ int				check_map(char *m)
 	{
 		return (0);
 	}
-// ft_putstr("exited check_map\n");
 }
 
 int				ft_isdigit(char c)
@@ -141,10 +157,14 @@ void			handle_line(char *line)
 			// TODO:
 			// 		handle duplicate information
 			// 		convert rgb to int
-			// 		handle resolution
 			if (len == 2 && !ft_strcmp(*infos, "C"))
 			{
 				conf.ceiling = rgb_char_to_int(infos[1]);
+				if (conf.ceiling == -1)
+				{
+					free(line);
+					ft_puterr(210);
+				}
 				ft_putstr("ceiling good!\n");
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "EA"))
@@ -152,7 +172,9 @@ void			handle_line(char *line)
 				conf.east = infos[1];
 				// file not found
 				if (open(conf.east, O_RDONLY) != -1)
+				{
 					ft_putstr("east good!\n");
+				}
 				else
 				{
 					free(line);
@@ -162,6 +184,11 @@ void			handle_line(char *line)
 			else if (len == 2 && !ft_strcmp(*infos, "F"))
 			{
 				conf.floor = rgb_char_to_int(infos[1]);
+				if (conf.floor == -1)
+				{
+					free(line);
+					ft_puterr(211);
+				}
 				ft_putstr("floor good!\n");
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "NO"))
@@ -169,7 +196,9 @@ void			handle_line(char *line)
 				conf.north = infos[1];
 				// file not found
 				if (open(conf.north, O_RDONLY) != -1)
+				{
 					ft_putstr("north good!\n");
+				}
 				else
 				{
 					free(line);
@@ -181,7 +210,11 @@ void			handle_line(char *line)
 				conf.w_x = ft_atoi(infos[1]);
 				conf.w_y = ft_atoi(infos[2]);
 				if (*infos[1] != '-' && *infos[2] != '-' && ft_isdigit(*infos[1]) && ft_isdigit(*infos[2]))
+				{
+					conf.w_x = (conf.w_x < 0) ? -2 : conf.w_x;
+					conf.w_y = (conf.w_y < 0) ? -2 : conf.w_y;
 					ft_putstr("resolution good!\n");
+				}
 				else
 				{
 					free(line);
@@ -193,7 +226,9 @@ void			handle_line(char *line)
 				conf.sprite = infos[1];
 				// file not found
 				if (open(conf.sprite, O_RDONLY) != -1)
+				{
 					ft_putstr("sprite good!\n");
+				}
 				else
 				{
 					free(line);
@@ -205,7 +240,9 @@ void			handle_line(char *line)
 				conf.south = infos[1];
 				// file not found
 				if (open(conf.south, O_RDONLY) != -1)
+				{
 					ft_putstr("south good!\n");
+				}
 				else
 				{
 					// ft_freesplitted(infos, len);
@@ -218,7 +255,9 @@ void			handle_line(char *line)
 				conf.west = infos[1];
 				// file not found
 				if (open(conf.west, O_RDONLY) != -1)
+				{
 					ft_putstr("west good!\n");
+				}
 				else
 				{
 					free(line);
@@ -262,7 +301,6 @@ void			handle_line(char *line)
 
 void			init_map_conf()
 {
-// ft_putstr("entered init_map_conf\n");
 
 	conf.w_x = -1;
 	conf.w_y = -1;
@@ -275,12 +313,10 @@ void			init_map_conf()
 	conf.p_x = -1;
 	conf.p_y = -1;
 	conf.p_dir = -1;
-// ft_putstr("exited init_map_conf\n");
 }
 
 void			handle_file(int fd)
 {
-// ft_putstr("entered handle_file\n");
 	int			result;
 	char		*line;
 
@@ -303,7 +339,6 @@ void			handle_file(int fd)
 	// validate data in file
 	// store data
 	close(fd);
-// ft_putstr("exited handle_file\n");
 }
 
 void			ft_print_conf()
@@ -323,7 +358,6 @@ void			ft_print_conf()
 
 int				main(int argc, char *argv[])
 {
-// ft_putstr("entered main\n");
 	int			fd;
 
 	init_map_conf();
@@ -370,5 +404,4 @@ int				main(int argc, char *argv[])
 		ft_puterr(102);
 	}
 	return (0);
-// ft_putstr("exited main\n");
 }
