@@ -15,6 +15,8 @@ static void		ft_puterr(int errn)
 			ft_putstr("Too few arguments provided!\n");
 		else if (errn == 103)
 			ft_putstr("Too much arguments provided!\n");
+		else if (errn == 104)
+			ft_putstr("Wrong file extension!\n");
 	}
 	// 200 - 299
 	// config file errors
@@ -103,11 +105,10 @@ int				rgb_char_to_int(char *rgb)
 	char	**colors;
 
 	colors = ft_split(rgb, ',');
-	// check r g b
 	color = rgb_to_hex(ft_atoi(colors[0]), ft_atoi(colors[1]), ft_atoi(colors[2]));
-	// check if number
+	// check r g b
+	// check if number &&
 	// check if forbidden character ('.', 'a', ...)
-	// check if 
 	if (!ft_strrgb(colors[0]) || !ft_strrgb(colors[1]) || !ft_strrgb(colors[2]))
 		color = -1;
 	ft_freesplitted(colors, 3);
@@ -117,7 +118,7 @@ int				rgb_char_to_int(char *rgb)
 int				check_map(char *m)
 {
 	write(1, &m[0], 1);
-	if (*m == '1' || *m == '2')
+	if (*m == '0' || *m == '1' || *m == '2' || *m == 'E' || *m == 'N' || *m == 'S' || *m == 'W')
 	{
 		return (1);
 	}
@@ -132,6 +133,22 @@ int				ft_isdigit(char c)
 	if (c >= 48 && c <= 57)
 		return (1);
 	return (0);
+}
+
+int				is_order_good()
+{
+	if (
+		conf.w_x == -1 || \
+		conf.w_y == -1 || \
+		conf.east == NULL || \
+		conf.north == NULL || \
+		conf.south == NULL || \
+		conf.west == NULL || \
+		conf.ceiling == -1 || \
+		conf.floor == -1
+	)
+		return (0);
+	return (1);
 }
 
 void			handle_line(char *line)
@@ -156,7 +173,8 @@ void			handle_line(char *line)
 			// which information
 			// TODO:
 			// 		handle duplicate information
-			// 		convert rgb to int
+			//		parse map
+			//		validate map
 			if (len == 2 && !ft_strcmp(*infos, "C"))
 			{
 				conf.ceiling = rgb_char_to_int(infos[1]);
@@ -275,8 +293,15 @@ void			handle_line(char *line)
 		else if (check_map(*infos))
 		{
 			// is order correct
+			if (!is_order_good())
+			{
+				free(line);
+				ft_puterr(0);
+			}
 			ft_putstr("map is good!\n");
-				// line contains information and begins or ends with spaces
+			// parse map and then validation
+			// OR
+			// validation while parsing map
 		}
 		// forbidden data
 		else
@@ -301,7 +326,6 @@ void			handle_line(char *line)
 
 void			init_map_conf()
 {
-
 	conf.w_x = -1;
 	conf.w_y = -1;
 	conf.east = NULL;
@@ -368,7 +392,11 @@ int				main(int argc, char *argv[])
 		if ((fd = open(argv[1], O_RDONLY)) == -1)
 		{
 			ft_puterr(100);
-			return (0);
+		}
+		// if extension is not 'cub'
+		else if (ft_strcmp(ft_strchr(argv[1], '.'), ".cub"))
+		{
+			ft_puterr(104);
 		}
 		// read, validate and store data
 		handle_file(fd);
@@ -403,5 +431,6 @@ int				main(int argc, char *argv[])
 	{
 		ft_puterr(102);
 	}
+	ft_putstr("all good\n");
 	return (0);
 }
