@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub_main.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abel-haj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/31 14:58:50 by abel-haj          #+#    #+#             */
+/*   Updated: 2021/01/31 14:58:51 by abel-haj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 static void		ft_puterr(int errn)
@@ -44,6 +56,13 @@ static void		ft_puterr(int errn)
 			ft_putstr("Incorrect or forbidden value in resolution!\n");
 		else if (errn == 210)
 			ft_putstr("Incorrect ceiling color!\n");
+		else if (errn == 211)
+			ft_putstr("Missing information or incorrct order of information!\n");
+	}
+	else if (errn <= 399)
+	{
+		if (errn == 300)
+			ft_putstr("Forbidden character in map!\n");
 	}
 	else
 		ft_putstr("An unregisterd error encountered!\n");
@@ -101,17 +120,19 @@ int				ft_strrgb(char *str)
 
 int				rgb_char_to_int(char *rgb)
 {
+	int		len;
 	int		color;
 	char	**colors;
 
 	colors = ft_split(rgb, ',');
+	len = ft_pplen(colors);
 	color = rgb_to_hex(ft_atoi(colors[0]), ft_atoi(colors[1]), ft_atoi(colors[2]));
 	// check r g b
 	// check if number &&
 	// check if forbidden character ('.', 'a', ...)
-	if (!ft_strrgb(colors[0]) || !ft_strrgb(colors[1]) || !ft_strrgb(colors[2]))
+	if (!ft_strrgb(colors[0]) || !ft_strrgb(colors[1]) || !ft_strrgb(colors[2]) || len != 3)
 		color = -1;
-	ft_freesplitted(colors, 3);
+	ft_freesplitted(colors, len);
 	return (color);
 }
 
@@ -151,9 +172,83 @@ int				is_order_good()
 	return (1);
 }
 
+int				handle_map(char *l)
+{
+	int		i;
+	int		len;
+
+	i = 0;
+	len = ft_strlen(l);
+	// first line
+	if (cols == 0 && rows == 0)
+	{
+	}
+	// 
+	else
+	{
+		// reallocate
+		// allocate
+	}
+	// nothing to free
+	// allocate
+	rows++;
+	cols = len;
+	map = malloc(rows * sizeof(int *));
+	map[rows - 1] = malloc(cols * sizeof(int));
+	while (l[i])
+	{
+		// inaccessable space
+		if (l[i] == ' ')
+		{
+			map[rows - 1][i] = -1;
+		}
+		// free space
+		else if (l[i] == '0')
+		{
+			map[rows - 1][i] = 0;
+		}
+		// wall
+		else if (l[i] == '1')
+		{
+			map[rows - 1][i] = 1;
+		}
+		// sprite
+		else if (l[i] == '2')
+		{
+			map[rows - 1][i] = 2;
+		}
+		// player facing east
+		else if (l[i] == 'E')
+		{
+			map[rows - 1][i] = 'E';
+		}
+		// player facing north
+		else if (l[i] == 'N')
+		{
+			map[rows - 1][i] = 'N';
+		}
+		// player facing south
+		else if (l[i] == 'S')
+		{
+			map[rows - 1][i] = 'S';
+		}
+		// player facing west
+		else if (l[i] == 'W')
+		{
+			map[rows - 1][i] = 'W';
+		}
+		// forbidden character
+		else
+		{
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
 void			handle_line(char *line)
 {
-// ft_putstr("entered handle_line\n");
 	int		len;
 	char	**infos;
 
@@ -181,6 +276,7 @@ void			handle_line(char *line)
 				if (conf.ceiling == -1)
 				{
 					free(line);
+					ft_freesplitted(infos, len);
 					ft_puterr(210);
 				}
 				ft_putstr("ceiling good!\n");
@@ -189,15 +285,13 @@ void			handle_line(char *line)
 			{
 				conf.east = infos[1];
 				// file not found
-				if (open(conf.east, O_RDONLY) != -1)
-				{
-					ft_putstr("east good!\n");
-				}
-				else
+				if (open(conf.east, O_RDONLY) == -1)
 				{
 					free(line);
+					ft_freesplitted(infos, len);
 					ft_puterr(203);
 				}
+				ft_putstr("east good!\n");
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "F"))
 			{
@@ -205,6 +299,7 @@ void			handle_line(char *line)
 				if (conf.floor == -1)
 				{
 					free(line);
+					ft_freesplitted(infos, len);
 					ft_puterr(211);
 				}
 				ft_putstr("floor good!\n");
@@ -213,15 +308,13 @@ void			handle_line(char *line)
 			{
 				conf.north = infos[1];
 				// file not found
-				if (open(conf.north, O_RDONLY) != -1)
-				{
-					ft_putstr("north good!\n");
-				}
-				else
+				if (open(conf.north, O_RDONLY) == -1)
 				{
 					free(line);
+					ft_freesplitted(infos, len);
 					ft_puterr(204);
 				}
+				ft_putstr("north good!\n");
 			}
 			else if (len == 3 && !ft_strcmp(*infos, "R"))
 			{
@@ -236,6 +329,7 @@ void			handle_line(char *line)
 				else
 				{
 					free(line);
+					ft_freesplitted(infos, len);
 					ft_puterr(209);
 				}
 			}
@@ -243,49 +337,44 @@ void			handle_line(char *line)
 			{
 				conf.sprite = infos[1];
 				// file not found
-				if (open(conf.sprite, O_RDONLY) != -1)
-				{
-					ft_putstr("sprite good!\n");
-				}
-				else
+				if (open(conf.sprite, O_RDONLY) == -1)
 				{
 					free(line);
+					ft_freesplitted(infos, len);
 					ft_puterr(205);
 				}
+				ft_putstr("sprite good!\n");
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "SO"))
 			{
 				conf.south = infos[1];
 				// file not found
-				if (open(conf.south, O_RDONLY) != -1)
-				{
-					ft_putstr("south good!\n");
-				}
-				else
+				if (open(conf.south, O_RDONLY) == -1)
 				{
 					// ft_freesplitted(infos, len);
 					free(line);
+					ft_freesplitted(infos, len);
 					ft_puterr(206);
 				}
+				ft_putstr("south good!\n");
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "WE"))
 			{
 				conf.west = infos[1];
 				// file not found
-				if (open(conf.west, O_RDONLY) != -1)
-				{
-					ft_putstr("west good!\n");
-				}
-				else
+				if (open(conf.west, O_RDONLY) == -1)
 				{
 					free(line);
+					ft_freesplitted(infos, len);
 					ft_puterr(207);
 				}
+				ft_putstr("west good!\n");
 			}
 			else
 			{
 				// bad information
 				free(line);
+				ft_freesplitted(infos, len);
 				ft_puterr(202);
 			}
 		}
@@ -296,19 +385,26 @@ void			handle_line(char *line)
 			if (!is_order_good())
 			{
 				free(line);
-				ft_puterr(0);
+				ft_freesplitted(infos, len);
+				ft_puterr(211);
 			}
 			ft_putstr("map is good!\n");
-			// parse map and then validation
-			// OR
-			// validation while parsing map
+			// parse map
+			if (handle_map(line))
+			{}
+			else
+			{
+				free(line);
+				ft_freesplitted(infos, len);
+				ft_puterr(300);
+			}
+			
 		}
 		// forbidden data
 		else
 		{
-			// 
-			// ft_putstr("h");
 			free(line);
+			ft_freesplitted(infos, len);
 			ft_puterr(201);
 		}
 	}
@@ -317,11 +413,11 @@ void			handle_line(char *line)
 	{
 		// bad conf
 		free(line);
+		ft_freesplitted(infos, len);
 		ft_puterr(201);
 	}
 	// free array
-	// ft_freesplitted(infos, len);
-// ft_putstr("exited handle_line\n");
+	ft_freesplitted(infos, len);
 }
 
 void			init_map_conf()
@@ -337,6 +433,12 @@ void			init_map_conf()
 	conf.p_x = -1;
 	conf.p_y = -1;
 	conf.p_dir = -1;
+}
+
+void			init_others()
+{
+	rows = 0;
+	map = NULL;
 }
 
 void			handle_file(int fd)
@@ -385,6 +487,7 @@ int				main(int argc, char *argv[])
 	int			fd;
 
 	init_map_conf();
+	init_others();
 	if (argc > 1)
 	{
 		// ft_putstr(argv[1]);
@@ -405,7 +508,7 @@ int				main(int argc, char *argv[])
 		{
 			// launch n play
 			ft_putstr("play\n");
-			ft_print_conf();
+			// ft_print_conf();
 		}
 		// map with save option
 		else if (argc == 3)
