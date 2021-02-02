@@ -32,14 +32,14 @@ backup		:
 		-I /usr/local/include
 
 $(NAME)		:
-	@/goinfre/abel-haj/.brew//Cellar/llvm/11.0.0_1/bin/clang \
+	@/goinfre/$(USER)/.brew//Cellar/llvm/11.0.1/bin/clang \
 		$(CFLAGS) $(SRC) -g -o $(NAME) -fsanitize=address \
 		-I /usr/local/include \
 		-L /usr/local/lib/ -lmlx \
 		-L /usr/lib/ -lz -framework OpenGL -framework AppKit && \
 		export ASAN_OPTIONS=detect_leaks=1 && \
-		echo "\033[1;33mCompiling object files...\033[0;39m"
-	# @/goinfre/abel-haj/.brew//Cellar/llvm/11.0.0/bin/clang \
+		echo "\033[1;33mCompiling object files...\033[0;39m" || \
+		echo "\033[1;31mfailed! compilation error or no llvm maybe?\033[0;39m"
 
 clean		:
 	@rm -rf $(NAME) $(OBJ) a.out && echo "\033[1;31mcleaning...\033[0;39m"
