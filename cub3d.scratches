@@ -1,0 +1,56 @@
+
+  : inaccessible space
+0 : free space (to move)
+1 : wall
+2 : sprite
+
+-1 : inaccessible space
+0 : free space
+1 : wall
+2 : sprite
+
+
+
+ 1
+101
+ 1
+
+
+r rows
+c cols
+p map
+
+**p
+
+p malloc r
+	pr malloc c
+
+	free pi
+free p
+
+||
+r N 1
+c N 2
+// no lines to free
+	// no cols to free
+// allocate r lines
+	// allocate c cols
+
+||l
+|||
+r 1 2
+c 2 3
+C is bigger than the previous
+// free lines
+	// free cols
+// allocate r lines
+	// allocate c cols
+
+|||
+|||
+||l
+C is smaller than the previous
+r 2 3
+c 3 2
+// same thing as previous
+
