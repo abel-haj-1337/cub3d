@@ -175,26 +175,45 @@ int				is_order_good()
 int				handle_map(char *l)
 {
 	int		i;
+	int		j;
 	int		len;
+	int		**tmp;
 
-	i = 0;
 	len = ft_strlen(l);
-	// first line
-	if (cols == 0 && rows == 0)
+
+	// if first line
+	if (rows == 0 && cols == 0)
 	{
+		// allocate new row
+		map = malloc((rows + 1) * sizeof(int *));
+		// allocate new cols : len
+		map[rows] = malloc(len * sizeof(int));
 	}
-	// 
+	// if not first line
 	else
 	{
-		// reallocate
-		// allocate
+		// copy previous rows and cols
+		tmp = map;
+		// allocate new rows
+		map = malloc((rows + 1) * sizeof(int *));
+		// allocate new cols : len
+		i = 0;
+		j = 0;
+		// rows
+		while (rows > i)
+		{
+			map[i] = malloc(len * sizeof(int));
+			while (cols > l)
+			{
+
+			}
+			i++;
+		}
+		// free previous rows and cols
+		free_it(tmp);
 	}
-	// nothing to free
-	// allocate
-	rows++;
-	cols = len;
-	map = malloc(rows * sizeof(int *));
-	map[rows - 1] = malloc(cols * sizeof(int));
+
+	i = 0;
 	while (l[i])
 	{
 		// inaccessable space
@@ -242,6 +261,11 @@ int				handle_map(char *l)
 		{
 			return (0);
 		}
+		i++;
+	}
+	while (i < cols)
+	{
+		map[rows - 1][i] = -1;
 		i++;
 	}
 	return (1);
@@ -398,7 +422,6 @@ void			handle_line(char *line)
 				ft_freesplitted(infos, len);
 				ft_puterr(300);
 			}
-			
 		}
 		// forbidden data
 		else
@@ -469,17 +492,17 @@ void			handle_file(int fd)
 
 void			ft_print_conf()
 {
-	printf("window width is %d\n", conf.w_x);
-	printf("window height is %d\n", conf.w_y);
+	printf("window width is %7d\n", conf.w_x);
+	printf("window height is %7d\n", conf.w_y);
 	printf("east texture is %s\n", conf.east);
 	printf("north texture is %s\n", conf.north);
 	printf("south texture is %s\n", conf.south);
 	printf("west texture is %s\n", conf.west);
-	printf("ceiling color is %d\n", conf.ceiling);
-	printf("floor color is %d\n", conf.floor);
-	printf("player x is %d\n", conf.p_x);
-	printf("player y is %d\n", conf.p_y);
-	printf("player direction is %d\n", conf.p_dir);
+	printf("ceiling color is %7d\n", conf.ceiling);
+	printf("floor color is %7d\n", conf.floor);
+	printf("player x is %7d\n", conf.p_x);
+	printf("player y is %7d\n", conf.p_y);
+	printf("player direction is %7d\n", conf.p_dir);
 }
 
 int				main(int argc, char *argv[])
