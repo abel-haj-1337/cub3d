@@ -109,9 +109,10 @@ int						destroy_mlx(void);
 static t_mlx			mlx;
 static t_player			player;
 static t_map_conf		conf;
+static int				cols;
+static int				rows;
 // t_image					image;
-
-static int						map; /*[MAP_WIDTH][MAP_HEIGHT] =
+static int				**map; /*[MAP_WIDTH][MAP_HEIGHT] =
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
