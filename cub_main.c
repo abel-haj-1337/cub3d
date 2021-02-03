@@ -159,13 +159,13 @@ int				ft_isdigit(char c)
 int				is_order_good()
 {
 	if (
-		conf.w_x == -1 || \
-		conf.w_y == -1 || \
-		conf.east == NULL || \
-		conf.north == NULL || \
-		conf.south == NULL || \
-		conf.west == NULL || \
-		conf.ceiling == -1 || \
+		conf.w_x == -1 ||
+		conf.w_y == -1 ||
+		conf.east == NULL ||
+		conf.north == NULL ||
+		conf.south == NULL ||
+		conf.west == NULL ||
+		conf.ceiling == -1 ||
 		conf.floor == -1
 	)
 		return (0);
@@ -175,44 +175,33 @@ int				is_order_good()
 int				handle_map(char *l)
 {
 	int		i;
-	int		j;
 	int		len;
-	int		**tmp;
+	char	**tmp;
 
+	i = 0;
 	len = ft_strlen(l);
 
-	// if first line
-	if (rows == 0 && cols == 0)
+	if (rows == 0)
 	{
-		// allocate new row
+		// 0 + 1
 		map = malloc((rows + 1) * sizeof(int *));
-		// allocate new cols : len
-		map[rows] = malloc(len * sizeof(int));
 	}
-	// if not first line
 	else
 	{
-		// copy previous rows and cols
 		tmp = map;
-		// allocate new rows
+		// 1 + 1
 		map = malloc((rows + 1) * sizeof(int *));
-		// allocate new cols : len
-		i = 0;
-		j = 0;
-		// rows
 		while (rows > i)
 		{
-			map[i] = malloc(len * sizeof(int));
-			while (cols > l)
-			{
-
-			}
+			// 1
+			map[i] = ft_strdup(tmp[i]);
 			i++;
 		}
-		// free previous rows and cols
-		free_it(tmp);
 	}
+	map[i] = ft_strdup(l);
+	rows++;
 
+/*
 	i = 0;
 	while (l[i])
 	{
@@ -263,12 +252,20 @@ int				handle_map(char *l)
 		}
 		i++;
 	}
-	while (i < cols)
+*/
+	return (1);
+}
+
+void			print_map()
+{
+	int		i;
+
+	i = 0;
+	while (rows > i)
 	{
-		map[rows - 1][i] = -1;
+		printf("||%s||\n", map[i]);
 		i++;
 	}
-	return (1);
 }
 
 void			handle_line(char *line)
@@ -344,7 +341,8 @@ void			handle_line(char *line)
 			{
 				conf.w_x = ft_atoi(infos[1]);
 				conf.w_y = ft_atoi(infos[2]);
-				if (*infos[1] != '-' && *infos[2] != '-' && ft_isdigit(*infos[1]) && ft_isdigit(*infos[2]))
+				if (*infos[1] != '-' && *infos[2] != '-' &&
+					ft_isdigit(*infos[1]) && ft_isdigit(*infos[2]))
 				{
 					conf.w_x = (conf.w_x < 0) ? -2 : conf.w_x;
 					conf.w_y = (conf.w_y < 0) ? -2 : conf.w_y;
@@ -375,7 +373,6 @@ void			handle_line(char *line)
 				// file not found
 				if (open(conf.south, O_RDONLY) == -1)
 				{
-					// ft_freesplitted(infos, len);
 					free(line);
 					ft_freesplitted(infos, len);
 					ft_puterr(206);
@@ -412,10 +409,10 @@ void			handle_line(char *line)
 				ft_freesplitted(infos, len);
 				ft_puterr(211);
 			}
-			ft_putstr("map is good!\n");
 			// parse map
 			if (handle_map(line))
-			{}
+			{
+			}
 			else
 			{
 				free(line);
@@ -470,23 +467,16 @@ void			handle_file(int fd)
 	char		*line;
 
 	line = NULL;
+	result = 0;
 	// read from file
 	init_map_conf();
 	while ((result = get_next_line(&line, fd)) > 0)
 	{
-		ft_putstr("line:|");
-		ft_putstr(line);
-		ft_putstr("|\n");
 		handle_line(line);
 		free(line);
 	}
-	ft_putstr("line:|");
-	ft_putstr(line);
-	ft_putstr("|\n");
 	handle_line(line);
 	free(line);
-	// validate data in file
-	// store data
 	close(fd);
 }
 
@@ -513,7 +503,6 @@ int				main(int argc, char *argv[])
 	init_others();
 	if (argc > 1)
 	{
-		// ft_putstr(argv[1]);
 		// cannot open file
 		if ((fd = open(argv[1], O_RDONLY)) == -1)
 		{
@@ -531,7 +520,7 @@ int				main(int argc, char *argv[])
 		{
 			// launch n play
 			ft_putstr("play\n");
-			// ft_print_conf();
+			print_map();
 		}
 		// map with save option
 		else if (argc == 3)

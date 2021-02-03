@@ -112,7 +112,7 @@ static t_map_conf		conf;
 static int				cols;
 static int				rows;
 // t_image					image;
-static int				**map; /*[MAP_WIDTH][MAP_HEIGHT] =
+static char				**map; /*[MAP_WIDTH][MAP_HEIGHT] =
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},

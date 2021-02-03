@@ -44,18 +44,19 @@ int		main()
 	// // printf("%d\n", ft_atoi("214748364444444444448"));
 	// // printf("%d\n", ft_atoi("214748364654321985640032168984212165498498461612315616164444444448"));
 
-
 	int a = 0;
 	int c[4] = {1, 2, 3, 4};
 	int d[] = {5, 6, 7, 8};
 	int	**b = malloc(3 * sizeof(int *));
-
-// 	assigning
+	int	**e;
+	a = 0;
 	while (a < 3)
 	{
 		b[a] = malloc(4 * sizeof(int));
 		a++;
 	}
+
+// 	assigning
 	a = 0;
 	while (a < 4)
 	{
@@ -76,13 +77,50 @@ int		main()
 	}
 
 // printing
+	// a = 0;
+	// while (a < 4)
+	// {
+	// 	printf("%d %3d\n", a, e[2][a]);
+	// 	a++;
+	// }
+
+	e = b;
+	b = malloc(3 * sizeof(int *));
 	a = 0;
-	while (a < 4)
+	while (a < 3)
 	{
-		printf("%d\n", b[2][a]);
+		b[a] = malloc(4 * sizeof(int));
 		a++;
 	}
 
+	a = 0;
+	while (a < 4)
+	{
+		b[0][a] = e[0][a];
+		a++;
+	}
+	a = 0;
+	while (a < 4)
+	{
+		b[1][a] = e[1][a];
+		a++;
+	}
+	a = 0;
+	while (a < 4)
+	{
+		b[2][a] = e[2][a];
+		a++;
+	}
+
+//	freeing
+	a = 0;
+	while (a < 3)
+	{
+		free(e[a]);
+		a++;
+	}
+	free(e);
+	printf("%3d\n", b[0][0]);
 //	freeing
 	a = 0;
 	while (a < 3)
@@ -91,4 +129,5 @@ int		main()
 		a++;
 	}
 	free(b);
+	// getcha`r();
 }
