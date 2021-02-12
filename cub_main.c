@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abel-haj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 14:58:50 by abel-haj          #+#    #+#             */
-/*   Updated: 2021/01/31 14:58:51 by abel-haj         ###   ########.fr       */
+/*   Updated: 2021/02/12 19:34:44 by abel-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ static void		ft_puterr(int errn)
 	else if (errn <= 399)
 	{
 		if (errn == 300)
+			ft_putstr("Incorrect map!\n");
+		if (errn == 301)
 			ft_putstr("Forbidden character in map!\n");
 	}
 	else
@@ -93,12 +95,16 @@ int				check_identifier(char *id)
 
 void			ft_freesplitted(char **s, size_t len)
 {
-	while (len + 1 > 0)
+	if (s != NULL)
 	{
-		free(s[len]);
-		len--;
+		while (len + 1 > 0)
+		{
+			if (s[len] != NULL)
+				free(s[len]);
+			len--;
+		}
+		free(s);
 	}
-	free(s);
 }
 
 int				ft_strrgb(char *str)
@@ -138,7 +144,6 @@ int				rgb_char_to_int(char *rgb)
 
 int				check_map(char *m)
 {
-	write(1, &m[0], 1);
 	if (*m == '0' || *m == '1' || *m == '2' || *m == 'E' || *m == 'N' || *m == 'S' || *m == 'W')
 	{
 		return (1);
@@ -172,7 +177,7 @@ int				is_order_good()
 	return (1);
 }
 
-int				handle_map(char *l)
+void			handle_map(char *l)
 {
 	int		i;
 	int		len;
@@ -197,63 +202,10 @@ int				handle_map(char *l)
 			map[i] = ft_strdup(tmp[i]);
 			i++;
 		}
+		ft_freesplitted(tmp, rows - 1);
 	}
-	map[i] = ft_strdup(l);
+	map[rows] = ft_strdup(l);
 	rows++;
-
-/*
-	i = 0;
-	while (l[i])
-	{
-		// inaccessable space
-		if (l[i] == ' ')
-		{
-			map[rows - 1][i] = -1;
-		}
-		// free space
-		else if (l[i] == '0')
-		{
-			map[rows - 1][i] = 0;
-		}
-		// wall
-		else if (l[i] == '1')
-		{
-			map[rows - 1][i] = 1;
-		}
-		// sprite
-		else if (l[i] == '2')
-		{
-			map[rows - 1][i] = 2;
-		}
-		// player facing east
-		else if (l[i] == 'E')
-		{
-			map[rows - 1][i] = 'E';
-		}
-		// player facing north
-		else if (l[i] == 'N')
-		{
-			map[rows - 1][i] = 'N';
-		}
-		// player facing south
-		else if (l[i] == 'S')
-		{
-			map[rows - 1][i] = 'S';
-		}
-		// player facing west
-		else if (l[i] == 'W')
-		{
-			map[rows - 1][i] = 'W';
-		}
-		// forbidden character
-		else
-		{
-			return (0);
-		}
-		i++;
-	}
-*/
-	return (1);
 }
 
 void			print_map()
@@ -261,6 +213,8 @@ void			print_map()
 	int		i;
 
 	i = 0;
+	ft_putnbr(rows);
+	ft_putstr("\n");
 	while (rows > i)
 	{
 		printf("||%s||\n", map[i]);
@@ -281,7 +235,7 @@ void			handle_line(char *line)
 		// skip
 	}
 	// 1 2 3
-	else if (len <= 3)
+	else // if (len <= 3)
 	{
 		// is information
 		if (check_identifier(*infos))
@@ -289,7 +243,6 @@ void			handle_line(char *line)
 			// which information
 			// TODO:
 			// 		handle duplicate information
-			//		parse map
 			//		validate map
 			if (len == 2 && !ft_strcmp(*infos, "C"))
 			{
@@ -410,15 +363,7 @@ void			handle_line(char *line)
 				ft_puterr(211);
 			}
 			// parse map
-			if (handle_map(line))
-			{
-			}
-			else
-			{
-				free(line);
-				ft_freesplitted(infos, len);
-				ft_puterr(300);
-			}
+			handle_map(line);
 		}
 		// forbidden data
 		else
@@ -429,13 +374,13 @@ void			handle_line(char *line)
 		}
 	}
 	// incorrect information
-	else if (len > 3)
-	{
-		// bad conf
-		free(line);
-		ft_freesplitted(infos, len);
-		ft_puterr(201);
-	}
+	// else if (len > 3)
+	// {
+	// 	// bad conf
+	// 	free(line);
+	// 	ft_freesplitted(infos, len);
+	// 	ft_puterr(201);
+	// }
 	// free array
 	ft_freesplitted(infos, len);
 }
@@ -461,6 +406,113 @@ void			init_others()
 	map = NULL;
 }
 
+int				check_forbidden_map(char *line, int y)
+{
+	int			i;
+
+	i = 0;
+	while (line[i])
+	{
+		
+		if (line[i] == 'E' || line[i] == 'N' || line[i] == 'S' || line[i] == 'W')
+		{
+			if (conf.p_dir == -1)
+			{
+				conf.p_dir = line[i];
+				conf.p_x = i;
+				conf.p_y = y;
+			}
+			else
+			{
+				printf("%d %d %c\n", i, y, line[i]);
+				return (1);
+			}
+		}
+		else if ((line[i] == '0' && (y == 0 || y == rows - 1)) ||
+			(line[i] != '0' && line[i] != '1' && line[i] != '2' && line[i] != ' '))
+		{
+			printf("%d %d %c\n", i, y, line[i]);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int				rborder_check(char *line, int len)
+{
+	while (line[len - 1] && line[len - 1] == ' ')
+	{
+		len--;
+	}
+	if (line[len - 1] == '1')
+		return (0);
+	return (1);
+}
+
+int				lborder_check(char *line)
+{
+	int		i;
+
+	i = 0;
+	while (line[i] && line[i] == ' ')
+	{
+		i++;
+	}
+	if (line[i] == '1')
+		return (0);
+	return (1);
+}
+
+int				yborder_check(char *line, int y)
+{
+	int		i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '0' || line[i] == 'S' ||
+			line[i] == 'E' || line[i] == 'N' ||
+			line[i] == 'S' || line[i] == 'W' ||
+			line[i] == '2')
+		{
+			// TODO:
+			// 		check top border
+			// 		check bottom border
+			// if prev line not bordered
+			if (y != 0)
+			{}
+				// 0
+		}
+		i++;
+	}
+	return (1);
+}
+
+void			validate_map()
+{
+	// 
+	int		i;
+	int		len;
+
+	i = 0;
+	while (rows > i)
+	{
+		len = ft_strlen(map[i]);
+		if (rborder_check(map[i], len) ||
+			lborder_check(map[i]) ||
+			yborder_check(map[i], i) ||
+			check_forbidden_map(map[i], i))
+		{
+			// 
+			printf("|%d %c|\n", i, map[i][len - 1]);
+			ft_freesplitted(map, rows - 1);
+			ft_puterr(300);
+		}
+		i++;
+	}
+}
+
 void			handle_file(int fd)
 {
 	int			result;
@@ -478,6 +530,7 @@ void			handle_file(int fd)
 	handle_line(line);
 	free(line);
 	close(fd);
+	validate_map();
 }
 
 void			ft_print_conf()
@@ -519,8 +572,8 @@ int				main(int argc, char *argv[])
 		if (argc == 2)
 		{
 			// launch n play
+			// print_map();
 			ft_putstr("play\n");
-			print_map();
 		}
 		// map with save option
 		else if (argc == 3)
