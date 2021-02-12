@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: abel-haj <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/08 18:26:34 by abel-haj          #+#    #+#              #
-#    Updated: 2020/12/08 18:34:22 by abel-haj         ###   ########.fr        #
+#    Updated: 2021/02/12 15:58:42 by abel-haj         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ backup		:
 		-I /usr/local/include
 
 $(NAME)		:
-	# @/goinfre/$(USER)/.brew//Cellar/llvm/11.0.1/bin/clang \
+	@gcc \
 		$(CFLAGS) $(SRC) -g -o $(NAME) -fsanitize=address \
 		-I /usr/local/include \
 		-L /usr/local/lib/ -lmlx \
@@ -40,6 +40,7 @@ $(NAME)		:
 		export ASAN_OPTIONS=detect_leaks=1 && \
 		echo "\033[1;33mCompiling object files...\033[0;39m" || \
 		echo "\033[1;31mfailed! compilation error or no llvm maybe?\033[0;39m"
+	# @/goinfre/$(USER)/.brew//Cellar/llvm/11.0.1/bin/clang \
 
 test		:
 	@gcc $(CFLAGS) $(SRC) -g -o $(NAME) \
@@ -52,7 +53,7 @@ clean		:
 	@rm -rf $(NAME) $(OBJ) a.out && echo "\033[1;31mcleaning...\033[0;39m"
 
 fclean		: clean
-	@rm -rf *.o *.a && echo "\033[1;31mforce clean...\033[0;39m"
+	@clear && rm -rf *.o *.a && echo "\033[1;31mforce clean...\033[0;39m"
 
 re			: fclean all clean
 
