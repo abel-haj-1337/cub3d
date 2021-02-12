@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abel-haj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/13 16:15:10 by abel-haj          #+#    #+#             */
-/*   Updated: 2021/01/13 16:15:14 by abel-haj         ###   ########.fr       */
+/*   Updated: 2021/02/12 16:10:37 by abel-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int				ft_atoi(char *str)
 void			ft_putnbr(int n)
 {
 	size_t result;
+	size_t tmp;
 
 	result = 0;
 	if (n < 0)
@@ -100,10 +101,14 @@ void			ft_putnbr(int n)
 	else
 		result = n;
 	if (result < 10)
-		write(1, (void *)result + 48, 1);
+	{
+		tmp = result + 48;
+		write(1, &tmp, 1);
+	}
 	else
 	{
+		tmp = (result % 10) + 48;
 		ft_putnbr(result / 10);
-		write(1, (void *)(result % 10) + 48, 1);
+		write(1, &tmp, 1);
 	}
 }
