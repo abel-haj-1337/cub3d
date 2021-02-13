@@ -6,7 +6,7 @@
 /*   By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 14:58:50 by abel-haj          #+#    #+#             */
-/*   Updated: 2021/02/12 19:34:44 by abel-haj         ###   ########.fr       */
+/*   Updated: 2021/02/13 18:09:02 by abel-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void		ft_puterr(int errn)
 		else if (errn == 210)
 			ft_putstr("Incorrect ceiling color!\n");
 		else if (errn == 211)
-			ft_putstr("Missing information or incorrct order of information!\n");
+			ft_putstr("Missing information or incorrect order of information!\n");
 	}
 	else if (errn <= 399)
 	{
@@ -86,8 +86,8 @@ int				ft_pplen(char **ps)
 int				check_identifier(char *id)
 {
 	if (!ft_strcmp(id, "C") || !ft_strcmp(id, "EA") ||
-		!ft_strcmp(id, "F") || !ft_strcmp(id, "NO") || 
-		!ft_strcmp(id, "R") || !ft_strcmp(id, "S") || 
+		!ft_strcmp(id, "F") || !ft_strcmp(id, "NO") ||
+		!ft_strcmp(id, "R") || !ft_strcmp(id, "S") ||
 		!ft_strcmp(id, "SO") || !ft_strcmp(id, "WE"))
 		return (1);
 	return (0);
@@ -132,10 +132,8 @@ int				rgb_char_to_int(char *rgb)
 
 	colors = ft_split(rgb, ',');
 	len = ft_pplen(colors);
-	color = rgb_to_hex(ft_atoi(colors[0]), ft_atoi(colors[1]), ft_atoi(colors[2]));
-	// check r g b
-	// check if number &&
-	// check if forbidden character ('.', 'a', ...)
+	color = rgb_to_hex(ft_atoi(colors[0]), ft_atoi(colors[1]),
+			ft_atoi(colors[2]));
 	if (!ft_strrgb(colors[0]) || !ft_strrgb(colors[1]) || !ft_strrgb(colors[2]) || len != 3)
 		color = -1;
 	ft_freesplitted(colors, len);
@@ -144,14 +142,12 @@ int				rgb_char_to_int(char *rgb)
 
 int				check_map(char *m)
 {
-	if (*m == '0' || *m == '1' || *m == '2' || *m == 'E' || *m == 'N' || *m == 'S' || *m == 'W')
-	{
+	if (*m == '0' || *m == '1' || *m == '2' ||
+		*m == 'E' || *m == 'N' || *m == 'S' ||
+		*m == 'W')
 		return (1);
-	}
 	else
-	{
 		return (0);
-	}
 }
 
 int				ft_isdigit(char c)
@@ -187,10 +183,8 @@ void			handle_map(char *l)
 	len = ft_strlen(l);
 
 	if (rows == 0)
-	{
 		// 0 + 1
 		map = malloc((rows + 1) * sizeof(int *));
-	}
 	else
 	{
 		tmp = map;
@@ -198,7 +192,6 @@ void			handle_map(char *l)
 		map = malloc((rows + 1) * sizeof(int *));
 		while (rows > i)
 		{
-			// 1
 			map[i] = ft_strdup(tmp[i]);
 			i++;
 		}
@@ -206,20 +199,6 @@ void			handle_map(char *l)
 	}
 	map[rows] = ft_strdup(l);
 	rows++;
-}
-
-void			print_map()
-{
-	int		i;
-
-	i = 0;
-	ft_putnbr(rows);
-	ft_putstr("\n");
-	while (rows > i)
-	{
-		printf("||%s||\n", map[i]);
-		i++;
-	}
 }
 
 void			handle_line(char *line)
@@ -240,10 +219,8 @@ void			handle_line(char *line)
 		// is information
 		if (check_identifier(*infos))
 		{
-			// which information
 			// TODO:
 			// 		handle duplicate information
-			//		validate map
 			if (len == 2 && !ft_strcmp(*infos, "C"))
 			{
 				conf.ceiling = rgb_char_to_int(infos[1]);
@@ -253,7 +230,6 @@ void			handle_line(char *line)
 					ft_freesplitted(infos, len);
 					ft_puterr(210);
 				}
-				ft_putstr("ceiling good!\n");
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "EA"))
 			{
@@ -265,7 +241,6 @@ void			handle_line(char *line)
 					ft_freesplitted(infos, len);
 					ft_puterr(203);
 				}
-				ft_putstr("east good!\n");
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "F"))
 			{
@@ -276,7 +251,6 @@ void			handle_line(char *line)
 					ft_freesplitted(infos, len);
 					ft_puterr(211);
 				}
-				ft_putstr("floor good!\n");
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "NO"))
 			{
@@ -288,7 +262,6 @@ void			handle_line(char *line)
 					ft_freesplitted(infos, len);
 					ft_puterr(204);
 				}
-				ft_putstr("north good!\n");
 			}
 			else if (len == 3 && !ft_strcmp(*infos, "R"))
 			{
@@ -299,7 +272,6 @@ void			handle_line(char *line)
 				{
 					conf.w_x = (conf.w_x < 0) ? -2 : conf.w_x;
 					conf.w_y = (conf.w_y < 0) ? -2 : conf.w_y;
-					ft_putstr("resolution good!\n");
 				}
 				else
 				{
@@ -318,7 +290,6 @@ void			handle_line(char *line)
 					ft_freesplitted(infos, len);
 					ft_puterr(205);
 				}
-				ft_putstr("sprite good!\n");
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "SO"))
 			{
@@ -330,7 +301,6 @@ void			handle_line(char *line)
 					ft_freesplitted(infos, len);
 					ft_puterr(206);
 				}
-				ft_putstr("south good!\n");
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "WE"))
 			{
@@ -342,7 +312,6 @@ void			handle_line(char *line)
 					ft_freesplitted(infos, len);
 					ft_puterr(207);
 				}
-				ft_putstr("west good!\n");
 			}
 			else
 			{
@@ -373,38 +342,15 @@ void			handle_line(char *line)
 			ft_puterr(201);
 		}
 	}
-	// incorrect information
-	// else if (len > 3)
-	// {
-	// 	// bad conf
-	// 	free(line);
-	// 	ft_freesplitted(infos, len);
-	// 	ft_puterr(201);
-	// }
-	// free array
 	ft_freesplitted(infos, len);
 }
 
-void			init_map_conf()
-{
-	conf.w_x = -1;
-	conf.w_y = -1;
-	conf.east = NULL;
-	conf.north = NULL;
-	conf.south = NULL;
-	conf.west = NULL;
-	conf.ceiling = -1;
-	conf.floor = -1;
-	conf.p_x = -1;
-	conf.p_y = -1;
-	conf.p_dir = -1;
-}
-
-void			init_others()
-{
-	rows = 0;
-	map = NULL;
-}
+/*
+** check_forbidden_map
+** y is current row index
+** 0 is good
+** 1 is bad
+*/
 
 int				check_forbidden_map(char *line, int y)
 {
@@ -413,31 +359,41 @@ int				check_forbidden_map(char *line, int y)
 	i = 0;
 	while (line[i])
 	{
-		
-		if (line[i] == 'E' || line[i] == 'N' || line[i] == 'S' || line[i] == 'W')
+		// if player
+		if (line[i] == 'E' || line[i] == 'N' ||
+			line[i] == 'S' || line[i] == 'W')
 		{
+			// if player not defined
 			if (conf.p_dir == -1)
 			{
 				conf.p_dir = line[i];
 				conf.p_x = i;
 				conf.p_y = y;
 			}
+			// else duplicate player
 			else
 			{
-				printf("%d %d %c\n", i, y, line[i]);
+				printf("%d %c\n", i + 1, line[i]);
 				return (1);
 			}
 		}
-		else if ((line[i] == '0' && (y == 0 || y == rows - 1)) ||
-			(line[i] != '0' && line[i] != '1' && line[i] != '2' && line[i] != ' '))
+		// else if forbidden character
+		else if ((line[i] != '0' && line[i] != '1' &&
+				line[i] != '2' && line[i] != ' '))
 		{
-			printf("%d %d %c\n", i, y, line[i]);
+			printf("|%d %c|\n", i + 1, line[i]);
 			return (1);
 		}
 		i++;
 	}
 	return (0);
 }
+
+/*
+** rborder_check
+** 0 is good
+** 1 is bad
+*/
 
 int				rborder_check(char *line, int len)
 {
@@ -449,6 +405,12 @@ int				rborder_check(char *line, int len)
 		return (0);
 	return (1);
 }
+
+/*
+** lborder_check
+** 0 is good
+** 1 is bad
+*/
 
 int				lborder_check(char *line)
 {
@@ -464,6 +426,13 @@ int				lborder_check(char *line)
 	return (1);
 }
 
+/*
+** yborder_check
+** y is current row index
+** 0 is good
+** 1 is bad
+*/
+
 int				yborder_check(char *line, int y)
 {
 	int		i;
@@ -471,30 +440,55 @@ int				yborder_check(char *line, int y)
 	i = 0;
 	while (line[i])
 	{
+		// [] that needs to be bordered
 		if (line[i] == '0' || line[i] == 'S' ||
 			line[i] == 'E' || line[i] == 'N' ||
 			line[i] == 'S' || line[i] == 'W' ||
 			line[i] == '2')
 		{
-			// TODO:
-			// 		check top border
-			// 		check bottom border
-			// if prev line not bordered
-			if (y != 0)
-			{}
-				// 0
+			// if top or bottom
+			if (y == 0 || y == rows - 1)
+			{
+				// not bordered
+				if (line[i] == '0' || line[i] == '2' ||
+					line[i] == 'E' || line[i] == 'N' ||
+					line[i] == 'S' || line[i] == 'W')
+				{
+					printf("|%d %c|\n", i + 1, line[i]);
+					return (1);
+				}
+			}
+			// if body
+			else
+			{
+				if (line[i] == '0' || line[i] == '2' ||
+					line[i] == 'E' || line[i] == 'N' ||
+					line[i] == 'S' || line[i] == 'W')
+				{
+					// not bordered
+					if ( (i >= ft_strlen(map[y - 1])) ||
+						map[y - 1][i] == ' ' ||
+						(i >= ft_strlen(map[y + 1])) ||
+						map[y + 1][i] == ' ' ||
+						line[i - 1] == ' ' || line[i + 1] == ' ')
+					{
+						printf("|%d %c|\n", i + 1, line[i]);
+						return (1);
+					}
+				}
+			}
 		}
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 void			validate_map()
 {
-	// 
 	int		i;
 	int		len;
 
+ft_print_conf();
 	i = 0;
 	while (rows > i)
 	{
@@ -504,8 +498,10 @@ void			validate_map()
 			yborder_check(map[i], i) ||
 			check_forbidden_map(map[i], i))
 		{
-			// 
-			printf("|%d %c|\n", i, map[i][len - 1]);
+			printf("|%d| |%d %d %d %d|\n", i + 12, rborder_check(map[i], len),
+			lborder_check(map[i]), yborder_check(map[i], i),
+			check_forbidden_map(map[i], i));
+
 			ft_freesplitted(map, rows - 1);
 			ft_puterr(300);
 		}
@@ -521,7 +517,7 @@ void			handle_file(int fd)
 	line = NULL;
 	result = 0;
 	// read from file
-	init_map_conf();
+	init_conf();
 	while ((result = get_next_line(&line, fd)) > 0)
 	{
 		handle_line(line);
@@ -533,72 +529,38 @@ void			handle_file(int fd)
 	validate_map();
 }
 
-void			ft_print_conf()
-{
-	printf("window width is %7d\n", conf.w_x);
-	printf("window height is %7d\n", conf.w_y);
-	printf("east texture is %s\n", conf.east);
-	printf("north texture is %s\n", conf.north);
-	printf("south texture is %s\n", conf.south);
-	printf("west texture is %s\n", conf.west);
-	printf("ceiling color is %7d\n", conf.ceiling);
-	printf("floor color is %7d\n", conf.floor);
-	printf("player x is %7d\n", conf.p_x);
-	printf("player y is %7d\n", conf.p_y);
-	printf("player direction is %7d\n", conf.p_dir);
-}
-
 int				main(int argc, char *argv[])
 {
 	int			fd;
 
-	init_map_conf();
+	init_conf();
 	init_others();
 	if (argc > 1)
 	{
 		// cannot open file
 		if ((fd = open(argv[1], O_RDONLY)) == -1)
-		{
 			ft_puterr(100);
-		}
 		// if extension is not 'cub'
 		else if (ft_strcmp(ft_strchr(argv[1], '.'), ".cub"))
-		{
 			ft_puterr(104);
-		}
 		// read, validate and store data
 		handle_file(fd);
 		// only map
 		if (argc == 2)
-		{
-			// launch n play
-			// print_map();
 			ft_putstr("play\n");
-		}
 		// map with save option
 		else if (argc == 3)
 		{
-			// launch n take screenshot
 			if (!ft_strcmp(argv[2], "--save"))
-			{
-				// 
 				ft_putstr("take screenshot!\n");
-			}
 			else
-			{
 				ft_puterr(101);
-			}
 		}
 		else
-		{
 			ft_puterr(103);
-		}
 	}
 	// no arguments
 	else
-	{
 		ft_puterr(102);
-	}
-	ft_putstr("all good\n");
 	return (0);
 }
