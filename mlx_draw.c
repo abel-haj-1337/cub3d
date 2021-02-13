@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_draw.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abel-haj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/17 18:28:02 by abel-haj          #+#    #+#             */
-/*   Updated: 2020/12/17 18:28:03 by abel-haj         ###   ########.fr       */
+/*   Updated: 2021/02/13 17:37:19 by abel-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void		draw_my_line(int from_x, int from_y, int to_x, int to_y, int color)
 	// number of steps to complete drawing the line
 	steps = (abs(dx) >= abs(dy)) ? abs(dx) : abs(dy);
 
-	// 
+	//
 	slope = dx / dy;
 
 	// increment x by (dx / steps)
@@ -83,14 +83,14 @@ void		draw_my_line(int from_x, int from_y, int to_x, int to_y, int color)
 
 void		draw_line(int from_x, int from_y, int to_x, int to_y, int color)
 {
-	int		x;	// 
-	int		y;	// 
+	int		x;	//
+	int		y;	//
 	int		xe;
 	int		ye;
 	int		py;
 	int		px;
-	int		dx;	// 
-	int		dy;	// 
+	int		dx;	//
+	int		dy;	//
 
 	// Get distance in each axis
 	dx = to_x - from_x;
@@ -139,7 +139,7 @@ void		draw_line(int from_x, int from_y, int to_x, int to_y, int color)
 	else
 	{ // The line is Y-axis dominant
 		// Line is drawn bottom to top
-		if (dy >= 0) 
+		if (dy >= 0)
 		{
 			x = from_x;
 			y = from_y;
