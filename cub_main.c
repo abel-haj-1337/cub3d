@@ -6,7 +6,7 @@
 /*   By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 14:58:50 by abel-haj          #+#    #+#             */
-/*   Updated: 2021/02/13 18:09:02 by abel-haj         ###   ########.fr       */
+/*   Updated: 2021/02/13 19:13:43 by abel-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -517,7 +517,7 @@ void			handle_file(int fd)
 	line = NULL;
 	result = 0;
 	// read from file
-	init_conf();
+	// init_conf();
 	while ((result = get_next_line(&line, fd)) > 0)
 	{
 		handle_line(line);
@@ -533,6 +533,7 @@ int				main(int argc, char *argv[])
 {
 	int			fd;
 
+	// init problem
 	init_conf();
 	init_others();
 	if (argc > 1)
