@@ -6,7 +6,7 @@
 /*   By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/08 18:49:59 by abel-haj          #+#    #+#             */
-/*   Updated: 2021/02/12 15:59:03 by abel-haj         ###   ########.fr       */
+/*   Updated: 2021/02/13 17:59:31 by abel-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,25 @@ void					init_player_at(int x, int y);
 // void					turn_player_by(int step);
 void					turn_move_player_by(int x, int y, int step);
 
-void					my_mlx_pixel_put(int x, int y, int color, t_image image);
-void					draw_square_image(int posX, int posY, int width, int color);
+void					my_mlx_pixel_put(int x, int y, int clr, t_image image);
+void					draw_square_image(int x, int y, int width, int color);
 void					draw_square(int posX, int posY, int width, int color);
-void					draw_line(int from_x, int from_y, int to_x, int to_y, int color);
-void					draw_my_line(int from_x, int from_y, int to_x, int to_y, int color);
+void					draw_line(int x, int y, int to_x, int to_y, int color);
+void					draw_my_line(int x, int y, int to_x, int to_y, int clr);
 
 int						destroy_mlx(void);
+
+
+/*
+**	FOR TESTING
+*/
+void					init_conf();
+void					init_others();
+void					ft_print_conf();
+void					ft_print_map();
+/*
+**	FOR TESTING
+*/
 
 static t_mlx			mlx;
 static t_player			player;
