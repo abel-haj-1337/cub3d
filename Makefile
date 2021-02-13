@@ -6,7 +6,7 @@
 #    By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/08 18:26:34 by abel-haj          #+#    #+#              #
-#    Updated: 2021/02/12 15:58:42 by abel-haj         ###   ########.fr        #
+#    Updated: 2021/02/13 17:50:05 by abel-haj         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ CFLAGS		= -Wall -Wextra -Werror
 
 # SRC			= *.c
 SRC			= cub_main.c \
+				printing.c init_things.c \
 				utils/libft_utils.c utils/ft_split.c \
 				utils/get_next_line.c utils/get_next_line_utils.c \
 				mlx_draw.c mlx_utils.c mlx_handle_keys.c mlx_handle_player.c \
