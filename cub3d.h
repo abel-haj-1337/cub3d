@@ -14,7 +14,8 @@
 
 # define CUB3D_H
 
-# include <mlx.h>
+// # include <mlx.h>
+# include "mlx_linux/mlx.h"
 # include <math.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -121,7 +122,7 @@ void					ft_print_map();
 static t_mlx			mlx;
 static t_player			player;
 static t_map_conf		conf;
-static int				cols;
+// static int				cols;
 static int				rows;
 // t_image					image;
 static char				**map; /*[MAP_WIDTH][MAP_HEIGHT] =
