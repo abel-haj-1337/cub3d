@@ -176,12 +176,9 @@ int				is_order_good()
 void			handle_map(char *l)
 {
 	int		i;
-	int		len;
 	char	**tmp;
 
 	i = 0;
-	len = ft_strlen(l);
-
 	if (rows == 0)
 		// 0 + 1
 		map = malloc((rows + 1) * sizeof(int *));
