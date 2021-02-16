@@ -26,7 +26,7 @@ int			handle_keys(int key_code)
 	 if (key_code == 0)
 	{
 		// move player to the left
-		if (player.x > 0)
+		if (g_player.x > 0)
 		{
 			turn_move_player_by(-1, 0, 0);
 		}
@@ -41,14 +41,14 @@ int			handle_keys(int key_code)
 	// top
 	 if (key_code == 13 || key_code == 126)
 	{
-		if (player.y > 0)
+		if (g_player.y > 0)
 		{
 			turn_move_player_by(0, -1, 0);
-printf("player angle : %.2f %.2f \n", player.view_angle, player.view_angle * M_PI / 180);
-printf("start x, y (%d,%d)\n", player.x, player.y);
+printf("player angle : %.2f %.2f \n", g_player.view_angle, g_player.view_angle * M_PI / 180);
+printf("start x, y (%d,%d)\n", g_player.x, g_player.y);
 printf("end   x, y (%.2f, %.2f)\n",
-	player.x+cos(player.view_angle * M_PI / 180) * player.view_length,
-	player.y+cos(player.view_angle * M_PI / 180) * player.view_length);
+	g_player.x+cos(g_player.view_angle * M_PI / 180) * g_player.view_length,
+	g_player.y+cos(g_player.view_angle * M_PI / 180) * g_player.view_length);
 		}
 	}
 
@@ -56,35 +56,35 @@ printf("end   x, y (%.2f, %.2f)\n",
 	 if (key_code == 1 || key_code == 125)
 	{
 		turn_move_player_by(0, 1, 0);
-printf("player angle : %.2f %.2f \n", player.view_angle, player.view_angle * M_PI / 180);
-printf("start x, y (%d,%d)\n", player.x, player.y);
+printf("player angle : %.2f %.2f \n", g_player.view_angle, g_player.view_angle * M_PI / 180);
+printf("start x, y (%d,%d)\n", g_player.x, g_player.y);
 printf("end   x, y (%.2f, %.2f)\n",
-	player.x+cos(player.view_angle * M_PI / 180) * player.view_length,
-	player.y+cos(player.view_angle * M_PI / 180) * player.view_length);
+	g_player.x+cos(g_player.view_angle * M_PI / 180) * g_player.view_length,
+	g_player.y+cos(g_player.view_angle * M_PI / 180) * g_player.view_length);
 	}
 
 	// turn left
 	 if (key_code == 123)
 	{
 		turn_move_player_by(0, 0, 5);
-printf("player angle : %.2f %.2f \n", player.view_angle, player.view_angle * M_PI / 180);
-printf("start x, y (%d,%d)\n", player.x, player.y);
+printf("player angle : %.2f %.2f \n", g_player.view_angle, g_player.view_angle * M_PI / 180);
+printf("start x, y (%d,%d)\n", g_player.x, g_player.y);
 printf("end   x, y (%.2f, %.2f)\n",
-	player.x+cos(player.view_angle * M_PI / 180) * player.view_length,
-	player.y+cos(player.view_angle * M_PI / 180) * player.view_length);
+	g_player.x+cos(g_player.view_angle * M_PI / 180) * g_player.view_length,
+	g_player.y+cos(g_player.view_angle * M_PI / 180) * g_player.view_length);
 	}
 
 	// turn right
 	 if (key_code == 124)
 	{
 		turn_move_player_by(0, 0, -5);
-printf("player angle : %.2f %.2f \n", player.view_angle, player.view_angle * M_PI / 180);
-printf("start x, y (%d,%d)\n", player.x, player.y);
+printf("player angle : %.2f %.2f \n", g_player.view_angle, g_player.view_angle * M_PI / 180);
+printf("start x, y (%d,%d)\n", g_player.x, g_player.y);
 printf("end   x, y (%.2f, %.2f)\n",
-	player.x+cos(player.view_angle * M_PI / 180) * player.view_length,
-	player.y+cos(player.view_angle * M_PI / 180) * player.view_length);
+	g_player.x+cos(g_player.view_angle * M_PI / 180) * g_player.view_length,
+	g_player.y+cos(g_player.view_angle * M_PI / 180) * g_player.view_length);
 	}
-	// printf("%d\n", key_code);
+	printf("%d\n", key_code);
 
 	return key_code;
 }

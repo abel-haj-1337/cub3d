@@ -21,10 +21,10 @@ int			is_wall_at(float x, float y) {
 	}
 	int map_x = floor(x / MAP_TILE_SIZE);
 	int map_y = floor(y / MAP_TILE_SIZE);
-	return map[map_y][map_x] != 0;
+	return g_map[map_y][map_x] != 0;
 }
 
-float		distanceBetweenPoints(float x1, float y1, float x2, float y2) {
+float		delta(float x1, float y1, float x2, float y2) {
 	return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
@@ -50,16 +50,18 @@ void		draw_map(int wall_color)
 {
 	int		i;
 	int		j;
+	int		len;
 
 	i = 0;
-	while (i < MAP_WIDTH)
+	while (i < g_rows)
 	{
 		j = 0;
-		while (j < MAP_HEIGHT)
+		len = ft_strlen(g_map[i]);
+		while (j < len)
 		{
-			if (map[i][j] == 1)
+			if (g_map[i][j] == '1')
 			{
-				draw_square(i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, wall_color);
+				draw_square(j * MAP_TILE_SIZE, i * MAP_TILE_SIZE, MAP_TILE_SIZE, wall_color);
 			}
 			j++;
 		}
@@ -87,7 +89,7 @@ void		draw_line_2(int from_x, int from_y, int to_x, int to_y, int color)
 	for (x = from_x; x < to_x; x++)
 	{
 		// Place pixel on the raster display
-		mlx_pixel_put(mlx.mlx, mlx.win, x, y, color);
+		mlx_pixel_put(g_mlx.mlx, g_mlx.win, x, y, color);
 printf("(%d, %d)\n", x, y);
 		if (D >= 0)
 		{
@@ -117,48 +119,36 @@ void		draw_rays()
 	}
 }
 
-int			main(void)
+void		handle_mlx()
 {
-	int		i = 0;
+	int		x;
+	int		y;
 
 	// initialize window
-	mlx.mlx = mlx_init();
-	mlx.win = mlx_new_window(mlx.mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "new window");
+	g_mlx.mlx = mlx_init();
+
+	mlx_get_screen_size(g_mlx.mlx, &x, &y);
+	if (g_conf.w_x > x || 0 > g_conf.w_x)
+		g_conf.w_x = x;
+	if (g_conf.w_y > y || 0 > g_conf.w_y)
+		g_conf.w_y = y;
+printf("%9d\n%9d\n%9d\n%9d\n", g_conf.w_x, g_conf.w_y, g_conf.p_x, g_conf.p_y);
+	g_mlx.win = mlx_new_window(g_mlx.mlx, g_conf.w_x, g_conf.w_y, "1337 Wolfenstein");
 
 	// initialize player
-	player.x = MAP_TILE_SIZE;
-	player.y = MAP_TILE_SIZE;
+	g_player.x = g_conf.p_x;
+	g_player.y = g_conf.p_y;
 
 	// handle events
-	mlx_hook(mlx.win, 2, 0, handle_keys, (void *)0);
-	mlx_hook(mlx.win, 17, 0, destroy_mlx, (void *)0);
+	mlx_hook(g_mlx.win, 2, 0, handle_keys, (void *)0);
+	mlx_hook(g_mlx.win, 17, 0, destroy_mlx, (void *)0);
 
 	// draw map
 	draw_map(RED);
 
 	// draw player
-	init_player_at((MAP_WIDTH * MAP_TILE_SIZE) / 2, (MAP_HEIGHT * MAP_TILE_SIZE) / 2);
-
-	// draw player rays
-	// draw_rays();
-
-	// // for(int j = 200; j < 351; j++)
-	// for(int j = 0; j < 201; j++)
-	// {
-	// 	// // draw_line(0, 0, j, j, WHITE);
-	// 	// draw_line(0, 0, j, 200 + j, WHITE);
-	// 	// draw_line(0, 0, 200 + j, j, WHITE);
-	// 	if (j < 25)
-	// 		draw_line(200, 200, 300 + j, 300 + j, WHITE);
-	// 		// printf("%d, %d\n", 300 + j, 300 + j);
-	// 	else
-	// 		draw_line(200, 200, 300 + 200 - j, 300 + j, WHITE);
-	// 		// printf("%d, %d\n", 300 + 50 - j, 300 + j);
-	// }
-	// draw_line(0, 100, 0, 125, WHITE);
+	init_player_at(g_player.x * MAP_TILE_SIZE, g_player.y * MAP_TILE_SIZE);
 
 	// keep game running
-	mlx_loop(mlx.mlx);
-
-	return 0;
+	mlx_loop(g_mlx.mlx);
 }

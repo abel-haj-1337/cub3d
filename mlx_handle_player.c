@@ -14,45 +14,45 @@
 
 void		init_player_at(int x, int y)
 {
-	player.x = x;
-	player.y = y;
+	g_player.x = x;
+	g_player.y = y;
 	// odd number
-	player.size = 7;
-	player.turn_speed = 50;
-	player.view_length = 75;
-	player.color = BLUE;
+	g_player.size = 7;
+	g_player.turn_speed = 50;
+	g_player.view_length = 75;
+	g_player.color = BLUE;
 
 	// 0 to 360
-	player.view_angle = 90;
+	g_player.view_angle = 90;
 	turn_move_player_by(0, 0, 0);
-	printf("%d\n", player.x);
-	printf("%d\n", player.x + (int)ceil(player.size / 2));
+	printf("%d\n", g_player.x);
+	printf("%d\n", g_player.x + (int)ceil(g_player.size / 2));
 }
 
 void		turn_move_player_by(int x, int y, int step)
 {
-	draw_square(player.x - ceil(player.size / 2), player.y - ceil(player.size / 2), player.size, BLACK);
+	draw_square(g_player.x - ceil(g_player.size / 2), g_player.y - ceil(g_player.size / 2), g_player.size, BLACK);
 	draw_line(
-		player.x,
-		player.y,
-		player.x + (cos(player.view_angle * M_PI / 180) * player.view_length),
-		player.y + (sin(player.view_angle * M_PI / 180) * player.view_length),
+		g_player.x,
+		g_player.y,
+		g_player.x + (cos(g_player.view_angle * M_PI / 180) * g_player.view_length),
+		g_player.y + (sin(g_player.view_angle * M_PI / 180) * g_player.view_length),
 		BLACK);
 
-	player.x += x;
-	player.y += y;
-	player.view_angle += step;
+	g_player.x += x;
+	g_player.y += y;
+	g_player.view_angle += step;
 
-	if (player.view_angle <= 0)
-		player.view_angle = 360;
-	else if (player.view_angle > 360)
-		player.view_angle = 1;
+	if (g_player.view_angle <= 0)
+		g_player.view_angle = 360;
+	else if (g_player.view_angle > 360)
+		g_player.view_angle = 1;
 
-	draw_square(player.x - ceil(player.size / 2), player.y - ceil(player.size / 2), player.size, BLUE);
+	draw_square(g_player.x - ceil(g_player.size / 2), g_player.y - ceil(g_player.size / 2), g_player.size, BLUE);
 	draw_line(
-		player.x,
-		player.y,
-		player.x + (cos(player.view_angle * M_PI / 180) * player.view_length),
-		player.y + (sin(player.view_angle * M_PI / 180) * player.view_length),
+		g_player.x,
+		g_player.y,
+		g_player.x + (cos(g_player.view_angle * M_PI / 180) * g_player.view_length),
+		g_player.y + (sin(g_player.view_angle * M_PI / 180) * g_player.view_length),
 		YELLOW);
 }

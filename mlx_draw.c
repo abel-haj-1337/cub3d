@@ -23,7 +23,7 @@ void		draw_square(int posX, int posY, int width, int color)
 		i = 0;
 		while (i < width)
 		{
-			mlx_pixel_put(mlx.mlx, mlx.win, j + posX, i + posY, color);
+			mlx_pixel_put(g_mlx.mlx, g_mlx.win, j + posX, i + posY, color);
 			i++;
 		}
 		j++;
@@ -37,7 +37,7 @@ void		draw_square_image(int posX, int posY, int width, int color)
 	t_image image;
 
 	j = 0;
-	image.img = mlx_new_image(mlx.mlx, posX, posY);
+	image.img = mlx_new_image(g_mlx.mlx, posX, posY);
 	image.addr = mlx_get_data_addr(image.img, &image.bpp, &image.line_height, &image.endian);
 	while (j < width)
 	{
@@ -49,7 +49,7 @@ void		draw_square_image(int posX, int posY, int width, int color)
 		}
 		j++;
 	}
-	mlx_put_image_to_window(mlx.mlx, mlx.win, image.img, posX, posY);
+	mlx_put_image_to_window(g_mlx.mlx, g_mlx.win, image.img, posX, posY);
 }
 
 void		draw_my_line(int from_x, int from_y, int to_x, int to_y, int color)
@@ -74,7 +74,7 @@ void		draw_my_line(int from_x, int from_y, int to_x, int to_y, int color)
 	// increment x by (dx / steps)
 	while (steps > 0)
 	{
-		mlx_pixel_put(mlx.mlx, mlx.win, from_x, from_y, color);
+		mlx_pixel_put(g_mlx.mlx, g_mlx.win, from_x, from_y, color);
 		from_x = round(from_x + dx / steps);
 		from_y = round(from_y + dy / steps);
 		steps--;
@@ -114,7 +114,7 @@ void		draw_line(int from_x, int from_y, int to_x, int to_y, int color)
 			y = to_y;
 			xe = from_x;
 		}
-		mlx_pixel_put(mlx.mlx, mlx.win, x, y, color);
+		mlx_pixel_put(g_mlx.mlx, g_mlx.win, x, y, color);
 
 		// Rasterize the line
 		while (x < xe)
@@ -133,7 +133,7 @@ void		draw_line(int from_x, int from_y, int to_x, int to_y, int color)
 			}
 			// Draw pixel from line span at
 			// currently rasterized position
-			mlx_pixel_put(mlx.mlx, mlx.win, x, y, color);
+			mlx_pixel_put(g_mlx.mlx, g_mlx.win, x, y, color);
 		}
 	}
 	else
@@ -151,7 +151,7 @@ void		draw_line(int from_x, int from_y, int to_x, int to_y, int color)
 			y = to_y;
 			ye = from_y;
 		}
-		mlx_pixel_put(mlx.mlx, mlx.win, x, y, color); // Draw first pixel
+		mlx_pixel_put(g_mlx.mlx, g_mlx.win, x, y, color); // Draw first pixel
 		// Rasterize the line
 		while (y < ye)
 		{
@@ -169,7 +169,7 @@ void		draw_line(int from_x, int from_y, int to_x, int to_y, int color)
 			}
 			// Draw pixel from line span at
 			// currently rasterized position
-			mlx_pixel_put(mlx.mlx, mlx.win, x, y, color);
+			mlx_pixel_put(g_mlx.mlx, g_mlx.win, x, y, color);
 		}
 	}
 }

@@ -14,8 +14,8 @@
 
 int		destroy_mlx(void)
 {
-	mlx_clear_window(mlx.mlx, mlx.win);
-	mlx_destroy_window(mlx.mlx, mlx.win);
+	mlx_clear_window(g_mlx.mlx, g_mlx.win);
+	mlx_destroy_window(g_mlx.mlx, g_mlx.win);
 	exit(0);
 	return (0);
 }

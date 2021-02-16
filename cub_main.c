@@ -100,7 +100,10 @@ void			ft_freesplitted(char **s, size_t len)
 		while (len + 1 > 0)
 		{
 			if (s[len] != NULL)
+			{
 				free(s[len]);
+				s[len] = NULL;
+			}
 			len--;
 		}
 		free(s);
@@ -160,14 +163,14 @@ int				ft_isdigit(char c)
 int				is_order_good()
 {
 	if (
-		conf.w_x == -1 ||
-		conf.w_y == -1 ||
-		conf.east == NULL ||
-		conf.north == NULL ||
-		conf.south == NULL ||
-		conf.west == NULL ||
-		conf.ceiling == -1 ||
-		conf.floor == -1
+		g_conf.w_x == -1 ||
+		g_conf.w_y == -1 ||
+		g_conf.east == NULL ||
+		g_conf.north == NULL ||
+		g_conf.south == NULL ||
+		g_conf.west == NULL ||
+		g_conf.ceiling == -1 ||
+		g_conf.floor == -1
 	)
 		return (0);
 	return (1);
@@ -179,23 +182,23 @@ void			handle_map(char *l)
 	char	**tmp;
 
 	i = 0;
-	if (rows == 0)
+	if (g_rows == 0)
 		// 0 + 1
-		map = malloc((rows + 1) * sizeof(int *));
+		g_map = malloc((g_rows + 1) * sizeof(int *));
 	else
 	{
-		tmp = map;
+		tmp = g_map;
 		// 1 + 1
-		map = malloc((rows + 1) * sizeof(int *));
-		while (rows > i)
+		g_map = malloc((g_rows + 1) * sizeof(int *));
+		while (g_rows > i)
 		{
-			map[i] = ft_strdup(tmp[i]);
+			g_map[i] = ft_strdup(tmp[i]);
 			i++;
 		}
-		ft_freesplitted(tmp, rows - 1);
+		ft_freesplitted(tmp, g_rows - 1);
 	}
-	map[rows] = ft_strdup(l);
-	rows++;
+	g_map[g_rows] = ft_strdup(l);
+	g_rows++;
 }
 
 void			handle_line(char *line)
@@ -217,11 +220,13 @@ void			handle_line(char *line)
 		if (check_identifier(*infos))
 		{
 			// TODO:
+			// 		missing player
 			// 		handle duplicate information
+			// 		texture and sprite files validation
 			if (len == 2 && !ft_strcmp(*infos, "C"))
 			{
-				conf.ceiling = rgb_char_to_int(infos[1]);
-				if (conf.ceiling == -1)
+				g_conf.ceiling = rgb_char_to_int(infos[1]);
+				if (g_conf.ceiling == -1)
 				{
 					free(line);
 					ft_freesplitted(infos, len);
@@ -230,9 +235,9 @@ void			handle_line(char *line)
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "EA"))
 			{
-				conf.east = infos[1];
+				g_conf.east = infos[1];
 				// file not found
-				if (open(conf.east, O_RDONLY) == -1)
+				if (open(g_conf.east, O_RDONLY) == -1)
 				{
 					free(line);
 					ft_freesplitted(infos, len);
@@ -241,8 +246,8 @@ void			handle_line(char *line)
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "F"))
 			{
-				conf.floor = rgb_char_to_int(infos[1]);
-				if (conf.floor == -1)
+				g_conf.floor = rgb_char_to_int(infos[1]);
+				if (g_conf.floor == -1)
 				{
 					free(line);
 					ft_freesplitted(infos, len);
@@ -251,9 +256,9 @@ void			handle_line(char *line)
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "NO"))
 			{
-				conf.north = infos[1];
+				g_conf.north = infos[1];
 				// file not found
-				if (open(conf.north, O_RDONLY) == -1)
+				if (open(g_conf.north, O_RDONLY) == -1)
 				{
 					free(line);
 					ft_freesplitted(infos, len);
@@ -262,13 +267,13 @@ void			handle_line(char *line)
 			}
 			else if (len == 3 && !ft_strcmp(*infos, "R"))
 			{
-				conf.w_x = ft_atoi(infos[1]);
-				conf.w_y = ft_atoi(infos[2]);
+				g_conf.w_x = ft_atoi(infos[1]);
+				g_conf.w_y = ft_atoi(infos[2]);
 				if (*infos[1] != '-' && *infos[2] != '-' &&
 					ft_isdigit(*infos[1]) && ft_isdigit(*infos[2]))
 				{
-					conf.w_x = (conf.w_x < 0) ? -2 : conf.w_x;
-					conf.w_y = (conf.w_y < 0) ? -2 : conf.w_y;
+					g_conf.w_x = (g_conf.w_x < 0) ? -2 : g_conf.w_x;
+					g_conf.w_y = (g_conf.w_y < 0) ? -2 : g_conf.w_y;
 				}
 				else
 				{
@@ -279,9 +284,9 @@ void			handle_line(char *line)
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "S"))
 			{
-				conf.sprite = infos[1];
+				g_conf.sprite = infos[1];
 				// file not found
-				if (open(conf.sprite, O_RDONLY) == -1)
+				if (open(g_conf.sprite, O_RDONLY) == -1)
 				{
 					free(line);
 					ft_freesplitted(infos, len);
@@ -290,9 +295,9 @@ void			handle_line(char *line)
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "SO"))
 			{
-				conf.south = infos[1];
+				g_conf.south = infos[1];
 				// file not found
-				if (open(conf.south, O_RDONLY) == -1)
+				if (open(g_conf.south, O_RDONLY) == -1)
 				{
 					free(line);
 					ft_freesplitted(infos, len);
@@ -301,9 +306,9 @@ void			handle_line(char *line)
 			}
 			else if (len == 2 && !ft_strcmp(*infos, "WE"))
 			{
-				conf.west = infos[1];
+				g_conf.west = infos[1];
 				// file not found
-				if (open(conf.west, O_RDONLY) == -1)
+				if (open(g_conf.west, O_RDONLY) == -1)
 				{
 					free(line);
 					ft_freesplitted(infos, len);
@@ -361,11 +366,11 @@ int				check_forbidden_map(char *line, int y)
 			line[i] == 'S' || line[i] == 'W')
 		{
 			// if player not defined
-			if (conf.p_dir == -1)
+			if (g_conf.p_dir == -1)
 			{
-				conf.p_dir = line[i];
-				conf.p_x = i;
-				conf.p_y = y;
+				g_conf.p_dir = line[i];
+				g_conf.p_x = i;
+				g_conf.p_y = y;
 			}
 			// else duplicate player
 			else
@@ -444,7 +449,7 @@ int				yborder_check(char *line, int y)
 			line[i] == '2')
 		{
 			// if top or bottom
-			if (y == 0 || y == rows - 1)
+			if (y == 0 || y == g_rows - 1)
 			{
 				// not bordered
 				if (line[i] == '0' || line[i] == '2' ||
@@ -463,10 +468,10 @@ int				yborder_check(char *line, int y)
 					line[i] == 'S' || line[i] == 'W')
 				{
 					// not bordered
-					if ( (i >= ft_strlen(map[y - 1])) ||
-						map[y - 1][i] == ' ' ||
-						(i >= ft_strlen(map[y + 1])) ||
-						map[y + 1][i] == ' ' ||
+					if ( (i >= ft_strlen(g_map[y - 1])) ||
+						g_map[y - 1][i] == ' ' ||
+						(i >= ft_strlen(g_map[y + 1])) ||
+						g_map[y + 1][i] == ' ' ||
 						line[i - 1] == ' ' || line[i + 1] == ' ')
 					{
 						printf("|%d %c|\n", i + 1, line[i]);
@@ -484,22 +489,20 @@ void			validate_map()
 {
 	int		i;
 	int		len;
+	int		a, b, c, d;
 
-ft_print_conf();
 	i = 0;
-	while (rows > i)
+	while (g_rows > i)
 	{
-		len = ft_strlen(map[i]);
-		if (rborder_check(map[i], len) ||
-			lborder_check(map[i]) ||
-			yborder_check(map[i], i) ||
-			check_forbidden_map(map[i], i))
+		len = ft_strlen(g_map[i]);
+		if ((a = rborder_check(g_map[i], len)) ||
+			(b = lborder_check(g_map[i])) ||
+			(c = yborder_check(g_map[i], i)) ||
+			(d = check_forbidden_map(g_map[i], i)))
 		{
-			printf("|%d| |%d %d %d %d|\n", i + 12, rborder_check(map[i], len),
-			lborder_check(map[i]), yborder_check(map[i], i),
-			check_forbidden_map(map[i], i));
-
-			ft_freesplitted(map, rows - 1);
+			printf("|%d| |%d %d %d %d|\n", i + 0, a,
+			b, c, d);
+			ft_freesplitted(g_map, g_rows - 1);
 			ft_puterr(300);
 		}
 		i++;
@@ -531,7 +534,9 @@ int				main(int argc, char *argv[])
 	int			fd;
 
 	// init problem
+	init_mlx();
 	init_conf();
+	init_player();
 	init_others();
 	if (argc > 1)
 	{
@@ -545,7 +550,13 @@ int				main(int argc, char *argv[])
 		handle_file(fd);
 		// only map
 		if (argc == 2)
+		{
 			ft_putstr("play\n");
+			// RAYCAST
+			handle_mlx();
+			// g_mlx.mlx = mlx_init();
+			// g_mlx.win = mlx_new_window(g_mlx.mlx, 500, 500, "1337 Wolfenstein");
+		}
 		// map with save option
 		else if (argc == 3)
 		{
