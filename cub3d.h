@@ -90,6 +90,12 @@ typedef struct			s_ray {
     int					wallHitContent;
 }						t_ray;
 
+
+void					init_mlx();
+void					init_conf();
+void					init_player();
+void					init_others();
+
 int						rgb_to_hex(int r, int g, int b);
 
 int						handle_keys(int key_code);
@@ -99,6 +105,7 @@ void					init_player_at(int x, int y);
 // void					turn_player_by(int step);
 void					turn_move_player_by(int x, int y, int step);
 
+void					handle_mlx();
 void					my_mlx_pixel_put(int x, int y, int clr, t_image image);
 void					draw_square_image(int x, int y, int width, int color);
 void					draw_square(int posX, int posY, int width, int color);
@@ -111,21 +118,22 @@ int						destroy_mlx(void);
 /*
 **	FOR TESTING
 */
-void					init_conf();
-void					init_others();
 void					ft_print_conf();
 void					ft_print_map();
 /*
 **	FOR TESTING
 */
 
-static t_mlx			mlx;
-static t_player			player;
-static t_map_conf		conf;
-// static int				cols;
-static int				rows;
+
+t_mlx					g_mlx;
+t_player				g_player;
+t_map_conf				g_conf;
+int						g_rows;
 // t_image					image;
-static char				**map; /*[MAP_WIDTH][MAP_HEIGHT] =
+char					**g_map;
+
+
+/*[MAP_WIDTH][MAP_HEIGHT] =
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
