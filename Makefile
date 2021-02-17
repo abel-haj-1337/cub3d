@@ -6,13 +6,13 @@
 #    By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/08 18:26:34 by abel-haj          #+#    #+#              #
-#    Updated: 2021/02/13 17:50:05 by abel-haj         ###   ########.fr        #
+#    Updated: 2021/02/17 17:58:51 by abel-haj         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= cub3D
 
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror #-fsanitize=address
 
 # SRC			= *.c
 SRC			= cub_main.c \
@@ -28,7 +28,7 @@ all			: $(NAME)
 
 $(NAME)		:
 	@gcc \
-		$(CFLAGS) $(SRC) -g -o $(NAME) -fsanitize=address \
+		$(CFLAGS) $(SRC) libmlx.dylib -g -o $(NAME) \
 		-I /usr/local/include \
 		-L /usr/local/lib/ -lmlx \
 		-L /usr/lib/ -lz -framework OpenGL -framework AppKit && \
