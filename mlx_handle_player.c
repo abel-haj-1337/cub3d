@@ -6,7 +6,7 @@
 /*   By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 18:13:26 by abel-haj          #+#    #+#             */
-/*   Updated: 2021/02/12 15:03:50 by abel-haj         ###   ########.fr       */
+/*   Updated: 2021/02/17 18:10:51 by abel-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void		init_player_at(int x, int y)
 
 	// 0 to 360
 	g_player.view_angle = 90;
-	turn_move_player_by(0, 0, 0);
+	turn_move_player_by_image(0, 0, 0);
 	printf("%d\n", g_player.x);
 	printf("%d\n", g_player.x + (int)ceil(g_player.size / 2));
 }

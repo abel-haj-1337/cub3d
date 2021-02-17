@@ -6,7 +6,7 @@
 /*   By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 14:58:50 by abel-haj          #+#    #+#             */
-/*   Updated: 2021/02/13 19:13:43 by abel-haj         ###   ########.fr       */
+/*   Updated: 2021/02/17 14:36:19 by abel-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,8 +163,8 @@ int				ft_isdigit(char c)
 int				is_order_good()
 {
 	if (
-		g_conf.w_x == -1 ||
-		g_conf.w_y == -1 ||
+		g_conf.w_w == -1 ||
+		g_conf.w_h == -1 ||
 		g_conf.east == NULL ||
 		g_conf.north == NULL ||
 		g_conf.south == NULL ||
@@ -267,13 +267,13 @@ void			handle_line(char *line)
 			}
 			else if (len == 3 && !ft_strcmp(*infos, "R"))
 			{
-				g_conf.w_x = ft_atoi(infos[1]);
-				g_conf.w_y = ft_atoi(infos[2]);
+				g_conf.w_w = ft_atoi(infos[1]);
+				g_conf.w_h = ft_atoi(infos[2]);
 				if (*infos[1] != '-' && *infos[2] != '-' &&
 					ft_isdigit(*infos[1]) && ft_isdigit(*infos[2]))
 				{
-					g_conf.w_x = (g_conf.w_x < 0) ? -2 : g_conf.w_x;
-					g_conf.w_y = (g_conf.w_y < 0) ? -2 : g_conf.w_y;
+					g_conf.w_w = (g_conf.w_w < 0) ? -2 : g_conf.w_w;
+					g_conf.w_h = (g_conf.w_h < 0) ? -2 : g_conf.w_h;
 				}
 				else
 				{
@@ -554,8 +554,34 @@ int				main(int argc, char *argv[])
 			ft_putstr("play\n");
 			// RAYCAST
 			handle_mlx();
-			// g_mlx.mlx = mlx_init();
-			// g_mlx.win = mlx_new_window(g_mlx.mlx, 500, 500, "1337 Wolfenstein");
+				// g_mlx.mlx = mlx_init();
+				// g_mlx.win = mlx_new_window(g_mlx.mlx, 500, 500, "1337 Wolfenstein");
+
+				// int x = 0;
+				// int y = 0;
+
+				// void *img;
+				// char *addr;
+				// int bits_per_pixel;
+				// int line_length;
+				// int endian;
+				// img = mlx_new_image(g_mlx.mlx, 500, 500);
+				// addr = mlx_get_data_addr(img, &bits_per_pixel, &line_length, &endian);
+
+				// for (int a=0; a<30; a++)
+				// {
+				// char *dst = addr + ((y + a) * line_length + x * (bits_per_pixel / 8));
+				// *(unsigned int*)dst = RED;
+				// dst = addr + ((y + a) * line_length + (x + 1) * (bits_per_pixel / 8));
+				// *(unsigned int*)dst = RED;
+				// mlx_put_image_to_window(g_mlx.mlx, g_mlx.win, img, 0, 0);
+				// }
+
+				// mlx_hook(g_mlx.win, 2, 0, handle_keys, (void *)0);
+				// mlx_hook(g_mlx.win, 17, 0, destroy_mlx, (void *)0);
+
+				// mlx_loop(g_mlx.mlx);
+
 		}
 		// map with save option
 		else if (argc == 3)

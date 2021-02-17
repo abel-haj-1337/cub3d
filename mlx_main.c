@@ -6,7 +6,7 @@
 /*   By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 18:18:06 by abel-haj          #+#    #+#             */
-/*   Updated: 2021/02/12 15:05:04 by abel-haj         ###   ########.fr       */
+/*   Updated: 2021/02/17 18:16:53 by abel-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int a = 0;
 int b = 0;
 
 int			is_wall_at(float x, float y) {
-	if (x <= 0 || x >= WINDOW_WIDTH || y <= 0 || y >= WINDOW_HEIGHT) {
+	if (x <= 0 || x >= g_conf.w_w || y <= 0 || y >= g_conf.w_h) {
 		return 1;
 	}
 	int map_x = floor(x / MAP_TILE_SIZE);
@@ -43,7 +43,53 @@ float		to_rad(float degree)
 
 void		draw_ray(float ray_rad, int index)
 {
+	ray_rad = index;
 	return;
+}
+
+void		draw_square_image(int x, int y, int width, int color)
+{
+	int		i;
+	int		j;
+	char	*dst;
+
+	i = 0;
+	while (i < width)
+	{
+		j = 0;
+		while (j < width)
+		{
+				if (y + i < g_conf.w_h && x + j < g_conf.w_w)
+					dst = g_img.addr + ((y + i) * g_img.line_height + (x + j) * (g_img.bpp / 8));
+				*(unsigned int*)dst = color;
+			j++;
+		}
+		i++;
+	}
+}
+
+void		draw_map_image(int wall_color)
+{
+	int		i;
+	int		j;
+	int		len;
+
+	i = 0;
+	while (i < g_rows)
+	{
+		j = 0;
+		len = ft_strlen(g_map[i]);
+		while (j < len)
+		{
+			if (g_map[i][j] == '1')
+			{
+				draw_square_image(j * MAP_TILE_SIZE, i * MAP_TILE_SIZE, MAP_TILE_SIZE, wall_color);
+			}
+			j++;
+		}
+		i++;
+	}
+	mlx_put_image_to_window(g_mlx.mlx, g_mlx.win, g_img.img, 0, 0);
 }
 
 void		draw_map(int wall_color)
@@ -128,12 +174,17 @@ void		handle_mlx()
 	g_mlx.mlx = mlx_init();
 
 	mlx_get_screen_size(g_mlx.mlx, &x, &y);
-	if (g_conf.w_x > x || 0 > g_conf.w_x)
-		g_conf.w_x = x;
-	if (g_conf.w_y > y || 0 > g_conf.w_y)
-		g_conf.w_y = y;
-printf("%9d\n%9d\n%9d\n%9d\n", g_conf.w_x, g_conf.w_y, g_conf.p_x, g_conf.p_y);
-	g_mlx.win = mlx_new_window(g_mlx.mlx, g_conf.w_x, g_conf.w_y, "1337 Wolfenstein");
+	if (g_conf.w_w > x || 0 > g_conf.w_w)
+		g_conf.w_w = x;
+	if (g_conf.w_h > y || 0 > g_conf.w_h)
+		g_conf.w_h = y;
+
+	g_img.img = mlx_new_image(g_mlx.mlx, g_conf.w_w, g_conf.w_h);
+	g_img.addr = mlx_get_data_addr(g_img.img, &g_img.bpp,
+	&g_img.line_height, &g_img.endian);
+
+	g_mlx.win = mlx_new_window(g_mlx.mlx, g_conf.w_w, g_conf.w_h,
+	"1337 Wolfenstein");
 
 	// initialize player
 	g_player.x = g_conf.p_x;
@@ -144,10 +195,14 @@ printf("%9d\n%9d\n%9d\n%9d\n", g_conf.w_x, g_conf.w_y, g_conf.p_x, g_conf.p_y);
 	mlx_hook(g_mlx.win, 17, 0, destroy_mlx, (void *)0);
 
 	// draw map
-	draw_map(RED);
+	// draw_map(RED);
+	draw_map_image(RED);
+
+	// printf("%9d\n%9d\n%9d\n%9d\n",
+	// 	g_conf.w_w, g_conf.w_h, g_conf.p_x* MAP_TILE_SIZE, g_conf.p_y* MAP_TILE_SIZE);
 
 	// draw player
-	init_player_at(g_player.x * MAP_TILE_SIZE, g_player.y * MAP_TILE_SIZE);
+	init_player_at(g_conf.p_x * MAP_TILE_SIZE, g_conf.p_y * MAP_TILE_SIZE);
 
 	// keep game running
 	mlx_loop(g_mlx.mlx);

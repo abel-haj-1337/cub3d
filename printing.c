@@ -2,8 +2,8 @@
 
 void			ft_print_conf()
 {
-	printf("window width is     %7d\n", g_conf.w_x);
-	printf("window height is    %7d\n", g_conf.w_y);
+	printf("window width is     %7d\n", g_conf.w_w);
+	printf("window height is    %7d\n", g_conf.w_h);
 	printf("east texture is     %s\n", g_conf.east);
 	printf("north texture is    %s\n", g_conf.north);
 	printf("south texture is    %s\n", g_conf.south);

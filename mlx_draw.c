@@ -6,7 +6,7 @@
 /*   By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/17 18:28:02 by abel-haj          #+#    #+#             */
-/*   Updated: 2021/02/13 17:37:19 by abel-haj         ###   ########.fr       */
+/*   Updated: 2021/02/17 18:21:25 by abel-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,26 +30,39 @@ void		draw_square(int posX, int posY, int width, int color)
 	}
 }
 
-void		draw_square_image(int posX, int posY, int width, int color)
+void	my_mlx_pixel_put(int x, int y, int color, t_image *image)
+{
+	char	*dst;
+
+	if ((x >= 0 || x < g_conf.w_w) && (y >= 0 || y < g_conf.w_h))
+	{
+		dst = image->addr + (y * image->line_height + x * (image->bpp / 8));
+		*(unsigned int*)dst = color;
+	}
+}
+
+void		draw_line_image(int frm_x, int frm_y, int to_x, int to_y, int color)
 {
 	int		i;
-	int		j;
-	t_image image;
+	int		dx;
+	int		dy;
+	int		opposite_or_adjacent;
+	float	curr_x;
+	float	curr_y;
 
-	j = 0;
-	image.img = mlx_new_image(g_mlx.mlx, posX, posY);
-	image.addr = mlx_get_data_addr(image.img, &image.bpp, &image.line_height, &image.endian);
-	while (j < width)
+	i = 0;
+	dx = frm_x - to_x;
+	dy = frm_y - to_y;
+	curr_x = frm_x;
+	curr_y = frm_y;
+	opposite_or_adjacent = (abs(dx) >= abs(dy)) ? abs(dx) : abs(dy);
+	while (i < opposite_or_adjacent)
 	{
-		i = 0;
-		while (i < width)
-		{
-			my_mlx_pixel_put(posX + j, posY + i, color, image);
-			i++;
-		}
-		j++;
+		// put pixel in image
+		my_mlx_pixel_put(round(curr_x), round(curr_y), color, &g_img);
+		curr_x += dx / (float)opposite_or_adjacent;
+		curr_y += dy / (float)opposite_or_adjacent;
 	}
-	mlx_put_image_to_window(g_mlx.mlx, g_mlx.win, image.img, posX, posY);
 }
 
 void		draw_my_line(int from_x, int from_y, int to_x, int to_y, int color)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abel-haj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 14:58:32 by abel-haj          #+#    #+#             */
-/*   Updated: 2021/01/31 14:58:33 by abel-haj         ###   ########.fr       */
+/*   Updated: 2021/02/17 14:28:12 by abel-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,4 @@ int		destroy_mlx(void)
 	mlx_destroy_window(g_mlx.mlx, g_mlx.win);
 	exit(0);
 	return (0);
-}
-
-void	my_mlx_pixel_put(int x, int y, int color, t_image image)
-{
-	char	*dst;
-
-	dst = image.addr + (y * image.line_height + x * (image.bpp / 8));
-	*(unsigned int*)dst = color;
 }

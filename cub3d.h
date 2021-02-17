@@ -6,7 +6,7 @@
 /*   By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/08 18:49:59 by abel-haj          #+#    #+#             */
-/*   Updated: 2021/02/13 17:59:31 by abel-haj         ###   ########.fr       */
+/*   Updated: 2021/02/17 18:11:19 by abel-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,12 @@
 # define MAP_WIDTH	24
 # define MAP_HEIGHT	24
 # define MAP_TILE_SIZE 24
-# define WINDOW_WIDTH	MAP_WIDTH * MAP_TILE_SIZE
-# define WINDOW_HEIGHT	MAP_HEIGHT * MAP_TILE_SIZE
-# define RAYS WINDOW_WIDTH
+# define RAYS 100
 
 typedef struct			s_map_conf
 {
-	int					w_x;
-	int					w_y;
+	int					w_w;
+	int					w_h;
 	int					ceiling;
 	int					floor;
 	char				*sprite;
@@ -65,6 +63,7 @@ typedef struct			s_player {
 	int					view_length;
 	float				view_angle;
 	float				turn_speed;
+	float				walk_speed;
 }						t_player;
 
 typedef struct			s_image {
@@ -103,14 +102,16 @@ int						handle_keys(int key_code);
 void					init_player_at(int x, int y);
 // void					move_player_by(int x, int y);
 // void					turn_player_by(int step);
-void					turn_move_player_by(int x, int y, int step);
+void					turn_move_player_by(int x, int y, int angle);
+void					turn_move_player_by_image(int x, int y, int angle);
 
 void					handle_mlx();
-void					my_mlx_pixel_put(int x, int y, int clr, t_image image);
+void					my_mlx_pixel_put(int x, int y, int clr, t_image *image);
 void					draw_square_image(int x, int y, int width, int color);
 void					draw_square(int posX, int posY, int width, int color);
 void					draw_line(int x, int y, int to_x, int to_y, int color);
 void					draw_my_line(int x, int y, int to_x, int to_y, int clr);
+void					draw_line_image(int x, int y, int t_x, int t_y, int c);
 
 int						destroy_mlx(void);
 
@@ -129,7 +130,7 @@ t_mlx					g_mlx;
 t_player				g_player;
 t_map_conf				g_conf;
 int						g_rows;
-// t_image					image;
+t_image					g_img;
 char					**g_map;
 
 
