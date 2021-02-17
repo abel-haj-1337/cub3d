@@ -6,13 +6,13 @@
 #    By: abel-haj <abel-haj@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/08 18:26:34 by abel-haj          #+#    #+#              #
-#    Updated: 2021/02/17 17:58:51 by abel-haj         ###   ########.fr        #
+#    Updated: 2021/02/17 18:12:53 by abel-haj         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= cub3D
 
-CFLAGS		= -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=address
 
 # SRC			= *.c
 SRC			= cub_main.c \
